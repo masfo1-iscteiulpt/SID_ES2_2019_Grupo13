@@ -1,0 +1,52 @@
+format 221
+
+classcanvas 128002 class_ref 128002 // Variaves
+  classdiagramsettings member_max_width 0 end
+  xyz -3 62 2000
+end
+classcanvas 128130 class_ref 128130 // Cultura
+  classdiagramsettings member_max_width 0 end
+  xyz 278 49 2000
+end
+classcanvas 128258 class_ref 128258 // VariaveisMedidas
+  classdiagramsettings member_max_width 0 end
+  xyz 163 210 2000
+end
+classcanvas 128386 class_ref 128386 // Medicoes
+  classdiagramsettings member_max_width 0 end
+  xyz 160 345 2000
+end
+classcanvas 128514 class_ref 128514 // Sistema
+  classdiagramsettings member_max_width 0 end
+  xyz 124 475 2000
+end
+classcanvas 129538 class_ref 128642 // Investigador
+  classdiagramsettings member_max_width 0 end
+  xyz 534 40 2000
+end
+classcanvas 130818 class_ref 128770 // MedicoesLuminosidade
+  classdiagramsettings member_max_width 0 end
+  xyz 57 783 2000
+end
+classcanvas 130946 class_ref 128898 // MedicoesTemperatura
+  classdiagramsettings member_max_width 0 end
+  xyz 61 644 2000
+end
+relationcanvas 129026 relation_ref 128130 // <association>
+  from ref 128002 z 2001 to ref 128130
+  no_role_a no_role_b
+  multiplicity_a_pos 262 99 3000 multiplicity_b_pos 207 100 3000
+end
+relationcanvas 129410 relation_ref 128386 // <composition>
+  from ref 128258 z 2001 to ref 128386
+  no_role_a no_role_b
+  multiplicity_a_pos 239 324 3000 multiplicity_b_pos 233 283 3000
+end
+relationcanvas 129666 relation_ref 128514 // <association>
+  from ref 128130 z 2001 to ref 129538
+  no_role_a no_role_b
+  no_multiplicity_a no_multiplicity_b
+end
+line 129154 -_-_
+  from ref 129026 z 2002 to ref 128258
+end
