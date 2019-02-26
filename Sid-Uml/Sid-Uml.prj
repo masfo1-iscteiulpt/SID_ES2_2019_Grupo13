@@ -1,7 +1,7 @@
 format 221
 "Sid-Uml"
-  revision 1
-  modified_by 2 "luisfernandes"
+  revision 4
+  modified_by 2 "User"
 
 
   
@@ -69,7 +69,7 @@ format 221
       size A4
     end
 
-    class 128002 "Variaves"
+    class 128002 "Variavel"
       visibility package 
       cpp_decl ""
       java_decl ""
@@ -92,7 +92,7 @@ format 221
       end
 
       attribute 128130 "NomeVariavel"
-	private explicit_type "varchar(100)"
+	private explicit_type "varchar(45)"
 	cpp_decl ""
 	java_decl ""
 	php_decl ""
@@ -159,7 +159,7 @@ format 221
       end
 
       attribute 128770 "NomeCultura"
-	private explicit_type "varchar(100)"
+	private explicit_type "varchar(45)"
 	cpp_decl ""
 	java_decl ""
 	php_decl ""
@@ -170,7 +170,7 @@ format 221
       end
 
       attribute 128898 "Descricao"
-	private explicit_type "varchar(400)"
+	private explicit_type "varchar(45)"
 	cpp_decl ""
 	java_decl ""
 	php_decl ""
@@ -191,18 +191,6 @@ format 221
       explicit_switch_type ""
       mysql_decl ""
       
-      classrelation 128642 // <composition>
-	relation_ref 128258 // <composition>
-      end
-
-      classrelation 128770 // <composition>
-	relation 128386 *---
-	  a role_name "" multiplicity "*" private
-	    classrelation_ref 128770 // <composition>
-	  b role_name "" multiplicity "1" private
-	    classrelation_ref 128898 // <composition>
-      end
-
       attribute 129026 "LimiteInferior"
 	private explicit_type "decimal(8,2)"
 	cpp_decl ""
@@ -224,62 +212,17 @@ format 221
 	mysql_decl ""
 	MysqlColumn
       end
-    end
 
-    class 128386 "Medicoes"
-      visibility package 
-      cpp_decl ""
-      java_decl ""
-      php_decl ""
-      python_2_2 python_decl ""
-      idl_decl ""
-      explicit_switch_type ""
-      mysql_decl ""
-      
-      classrelation 128514 // <composition>
-	relation 128258 *---
-	  a role_name "" private
-	    classrelation_ref 128514 // <composition>
-	  b role_name "" private
-	    classrelation_ref 128642 // <composition>
+      classrelation 135938 // <composition>
+	relation_ref 135170 // <composition>
       end
 
-      classrelation 128898 // <composition>
-	relation_ref 128386 // <composition>
-      end
-
-      attribute 129282 "IDMedicao"
-	private explicit_type "int"
-	stereotype "primary key"
-	cpp_decl ""
-	java_decl ""
-	php_decl ""
-	python_decl ""
-	idl_decl ""
-	mysql_decl ""
-	MysqlColumn
-      end
-
-      attribute 129410 "DataHora"
-	private explicit_type "timestamp"
-	cpp_decl ""
-	java_decl ""
-	php_decl ""
-	python_decl ""
-	idl_decl ""
-	mysql_decl ""
-	MysqlColumn
-      end
-
-      attribute 129538 "ValorLuminosidade"
-	private explicit_type "decimal(8,2)"
-	cpp_decl ""
-	java_decl ""
-	php_decl ""
-	python_decl ""
-	idl_decl ""
-	mysql_decl ""
-	MysqlColumn
+      classrelation 136066 // <composition>
+	relation 135298 *---
+	  a role_name "" multiplicity "*" private
+	    classrelation_ref 136066 // <composition>
+	  b role_name "" multiplicity "1" private
+	    classrelation_ref 136194 // <composition>
       end
     end
 
@@ -349,7 +292,7 @@ format 221
       mysql_decl ""
       
       attribute 128258 "Email"
-	private explicit_type "varchar(50)"
+	private explicit_type "varchar(100)"
 	stereotype "primary key"
 	cpp_decl ""
 	java_decl ""
@@ -372,7 +315,7 @@ format 221
       end
 
       attribute 128514 "Categoria"
-	private explicit_type "varchar(300)"
+	private explicit_type "varchar(45)"
 	cpp_decl ""
 	java_decl ""
 	php_decl ""
@@ -384,51 +327,6 @@ format 221
 
       classrelation 129154 // <association>
 	relation_ref 128514 // <association>
-      end
-    end
-
-    class 128770 "MedicoesLuminosidade"
-      visibility package 
-      cpp_decl ""
-      java_decl ""
-      php_decl ""
-      python_2_2 python_decl ""
-      idl_decl ""
-      explicit_switch_type ""
-      mysql_decl ""
-      
-      attribute 129666 "IDMedicao"
-	private explicit_type "int"
-	stereotype "primary key"
-	cpp_decl ""
-	java_decl ""
-	php_decl ""
-	python_decl ""
-	idl_decl ""
-	mysql_decl ""
-	MysqlColumn
-      end
-
-      attribute 129794 "DataHora"
-	private explicit_type "timestamp"
-	cpp_decl ""
-	java_decl ""
-	php_decl ""
-	python_decl ""
-	idl_decl ""
-	mysql_decl ""
-	MysqlColumn
-      end
-
-      attribute 129922 "ValorLuminosidade"
-	private explicit_type "decimal(8,2)"
-	cpp_decl ""
-	java_decl ""
-	php_decl ""
-	python_decl ""
-	idl_decl ""
-	mysql_decl ""
-	MysqlColumn
       end
     end
 
@@ -477,7 +375,7 @@ format 221
       end
     end
 
-    class 129026 "Log_Investigador"
+    class 129026 "Log_Utilizador"
       visibility package 
       cpp_decl ""
       java_decl ""
@@ -498,9 +396,302 @@ format 221
 	mysql_decl ""
 	MysqlColumn
       end
+    end
 
-      attribute 131074 "Utilizador"
-	private explicit_type ""
+    class 135554 "Medicao"
+      visibility package 
+      cpp_decl ""
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      mysql_decl ""
+      
+      attribute 137602 "IDMedicao"
+	private explicit_type "int"
+	stereotype "primary key"
+	cpp_decl ""
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+
+      attribute 137730 "DataHora"
+	private explicit_type "timestamp"
+	cpp_decl ""
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+
+      classrelation 135682 // <dependency>
+	relation 135042 -_->
+	  a public
+	    comment "extends"
+	    classrelation_ref 135682 // <dependency>
+	  b parent class_ref 135682 // Medicao_Manual
+      end
+
+      classrelation 136450 // <dependency>
+	relation 135554 -_->
+	  a public
+	    classrelation_ref 136450 // <dependency>
+	  b parent class_ref 135938 // Medicao_Automatica
+      end
+
+      attribute 145538 "Sensor_Tipo"
+	private explicit_type "varchar(10)"
+	cpp_decl ""
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+
+      attribute 145666 "Valor"
+	private explicit_type "decimal"
+	cpp_decl ""
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+    end
+
+    class 135682 "Medicao_Manual"
+      visibility package 
+      cpp_decl ""
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      mysql_decl ""
+      
+      classrelation 135810 // <composition>
+	relation 135170 *---
+	  a role_name "" private
+	    classrelation_ref 135810 // <composition>
+	  b role_name "" private
+	    classrelation_ref 135938 // <composition>
+      end
+
+      classrelation 136194 // <composition>
+	relation_ref 135298 // <composition>
+      end
+
+      attribute 145282 "idVariavel"
+	private explicit_type "int"
+	cpp_decl ""
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+
+      attribute 145410 "idCultura"
+	private explicit_type "int"
+	cpp_decl ""
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+    end
+
+    class 135810 "Sensor"
+      visibility package 
+      cpp_decl ""
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      mysql_decl ""
+      
+      attribute 145154 "Tipo"
+	private explicit_type "varchar(10)"
+	cpp_decl ""
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+    end
+
+    class 135938 "Medicao_Automatica"
+      visibility package 
+      cpp_decl ""
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      mysql_decl ""
+      
+      attribute 137986 "Tipo"
+	private type class_ref 135810 // Sensor
+	cpp_decl ""
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+
+      classrelation 136322 // <dependency>
+	relation 135426 -_->
+	  a public
+	    classrelation_ref 136322 // <dependency>
+	  b parent class_ref 135554 // Medicao
+      end
+    end
+
+    class 136066 "Log_Culturas"
+      visibility package 
+      cpp_decl ""
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      mysql_decl ""
+      
+      attribute 145794 "precedencia"
+	private explicit_type "int"
+	stereotype "primary key"
+	cpp_decl ""
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+
+      attribute 145922 "DataHora"
+	private explicit_type "timestamp"
+	stereotype "primary key"
+	cpp_decl ""
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+
+      attribute 146050 "Operacao"
+	private explicit_type "varchar(45)"
+	cpp_decl ""
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+
+      attribute 146178 "idCultura"
+	private explicit_type "int"
+	stereotype "primary key"
+	cpp_decl ""
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+
+      attribute 146306 "Investigador"
+	private explicit_type "varchar(45)"
+	cpp_decl ""
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+
+      attribute 146434 "Nome"
+	private explicit_type "varchar(45)"
+	cpp_decl ""
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+
+      attribute 146562 "descricao"
+	private explicit_type "varchar(45)"
+	cpp_decl ""
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+    end
+
+    class 136194 "Log_Mediçoes"
+      visibility package 
+      cpp_decl ""
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      mysql_decl ""
+      
+      attribute 138498 "ID"
+	private explicit_type "int"
+	stereotype "primary key"
+	cpp_decl ""
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+    end
+
+    class 136322 "Log_Consultas"
+      visibility package 
+      cpp_decl ""
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      mysql_decl ""
+      
+      attribute 138626 "ID"
+	private explicit_type "int"
+	stereotype "primary key"
 	cpp_decl ""
 	java_decl ""
 	php_decl ""

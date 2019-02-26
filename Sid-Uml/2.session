@@ -1,0 +1,15 @@
+window_sizes 1920 1017 249 1666 864 106
+
+show_stereotypes
+selected attribute_ref 128514 // Categoria
+open
+  class_ref 128642 // Investigador
+  class_ref 129026 // Log_Utilizador
+  class_ref 135554 // Medicao
+  class_ref 135682 // Medicao_Manual
+  class_ref 135810 // Sensor
+  class_ref 135938 // Medicao_Automatica
+  class_ref 136066 // Log_Culturas
+  class_ref 136194 // Log_Mediçoes
+end
+end
