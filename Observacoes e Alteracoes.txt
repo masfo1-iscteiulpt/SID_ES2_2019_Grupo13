@@ -1,0 +1,6 @@
+1- tabela medicao_log nao pode ter a coluna NumeroMedicao como chave primaria pois, para alem de desnecessario uma vez que ja existe a coluna id, isto impossiblita a utilizacao da tabela para o registo de selects da maneira que a base de dados esta especificada.
+2- todas as tabelas de logs serao alteradas para que a sua chave primaria seja exclusivamente o id.
+3- cria e apaga utilizador vao ser alterados de forma a que seja evocado o metodo createuser do mysql.
+4- SP insere_medicao apenas inclui um valor como parametro 
+5- as tabelas que tem ids vao passar a ser autoincrement uma vez que o metodo de verificar o valor maximo na tabela so funciona se existirem entradas na tabela
+6- do modo indicado na especificacao nao e possivel realizar as SP associadas a migracao da forma entendida uma vez que as variaves defenidas sao apenas de sessao, nao funcionando para guardar o valor do id da ultima migracao

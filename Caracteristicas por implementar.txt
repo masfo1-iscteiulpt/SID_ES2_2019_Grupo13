@@ -1,0 +1,3 @@
+1-Auditor na base de dados de auditoria
+2-ficheiro .bat de suporte a migracao
+3-cria utilizador tem dar grant aos privilegios
