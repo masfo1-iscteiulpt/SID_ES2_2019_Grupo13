@@ -22,9 +22,8 @@ public class Poller {
 	public static void main(String[] args ) throws InterruptedException {
 		Poller p=new Poller();
 		p.connect();
-		while(true) {
-		p.publish();
 		p.subscribe();
+		while(true) {
 		Thread.sleep(4000);
 		}
 	}	
@@ -60,16 +59,6 @@ public class Poller {
 	public void disconnect() {
 		try {
 			sampleClient.disconnect();
-		} catch(MqttException me) {
-			exeptionMessage(me);
-		}
-	}
-	
-	public void publish() {
-		try {
-			MqttMessage message = new MqttMessage(content.getBytes());
-			message.setQos(qos);
-			sampleClient.publish(topic, message);
 		} catch(MqttException me) {
 			exeptionMessage(me);
 		}
