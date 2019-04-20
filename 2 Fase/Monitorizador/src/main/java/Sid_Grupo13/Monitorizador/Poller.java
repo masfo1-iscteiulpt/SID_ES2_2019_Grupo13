@@ -1,52 +1,33 @@
 package Sid_Grupo13.Monitorizador;
 
-import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
 import org.eclipse.paho.client.mqttv3.MqttCallback;
 import org.eclipse.paho.client.mqttv3.MqttClient;
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 import org.eclipse.paho.client.mqttv3.MqttException;
-import org.eclipse.paho.client.mqttv3.MqttMessage;
 import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
 
-public class Poller {
+public class Poller{
 
-	String topic        = "Teste";
-	String content      = "Teste";
-	int qos             = 0;
-	String broker       = "tcp://iot.eclipse.org:1883";
-	String clientId     = "JavaSample";
+	String topic; 
+	String broker;
+	String clientId;
 	MemoryPersistence persistence = new MemoryPersistence();
 	MqttClient sampleClient;
 	MqttConnectOptions connOpts;
 	
-	public static void main(String[] args ) throws InterruptedException {
-		Poller p=new Poller();
-		p.connect();
-		p.subscribe();
-		while(true) {
-		Thread.sleep(4000);
-		}
-	}	
 	
-	public Poller() {
+	public Poller(String topic,String broker,String clientId,MqttCallback callback) {
 		try {
+			this.topic=topic;
+			this.broker=broker;
+			this.clientId=clientId;
 			sampleClient=new MqttClient(broker, clientId, persistence);
-			sampleClient.setCallback(createCallback());
+			sampleClient.setCallback(callback);
 			connOpts= new MqttConnectOptions();
 			connOpts.setCleanSession(true);
 		} catch (MqttException me) {
 			exeptionMessage(me);
 		}
-	}
-	
-	private MqttCallback createCallback() {
-		return new MqttCallback() {
-			public void connectionLost(Throwable cause) {}
-			public void messageArrived(String topic, MqttMessage message) throws Exception {
-				System.out.println(message.toString());
-			}
-			public void deliveryComplete(IMqttDeliveryToken token) {}
-		};
 	}
 
 	public void connect() {
@@ -67,7 +48,6 @@ public class Poller {
 
 	public void subscribe() {
 		try {
-			System.out.println("Publishing message: "+content);
 			sampleClient.subscribe(topic);
 		} catch(MqttException me) {
 			exeptionMessage(me);
@@ -82,4 +62,5 @@ public class Poller {
 		System.out.println("excep "+me);
 		me.printStackTrace();
 	}
+
 }
