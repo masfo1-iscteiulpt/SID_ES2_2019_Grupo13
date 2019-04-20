@@ -1,38 +1,37 @@
 package Sid_Grupo13.Monitorizador;
 
 import org.bson.Document;
-import org.codehaus.jackson.map.ObjectMapper;
 
 import com.mongodb.MongoClient;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 
-
 public class MongoConnector {
-	private String targetDB;
-	MongoClient mongoClient;
-	private MongoDatabase database;
-	private MongoCollection<Document> mc;
-	
-	MongoConnector(String targetDB){
-		this.targetDB=targetDB;
+
+	private MongoClient mongoClient;
+	private MongoDatabase mongoDatabase;
+	private MongoCollection<Document> mongoCollection;
+
+	public MongoConnector(String database, String collection) {
 		mongoClient = new MongoClient("localhost", 27017);
-		database = mongoClient.getDatabase(targetDB);
-		getCollection();
+		mongoDatabase = mongoClient.getDatabase(database);
+		mongoCollection = mongoDatabase.getCollection(collection);
 	}
-	
-	public void getCollection(){
-		mc=database.getCollection(targetDB);
+
+	public void getCollection(String collection) {
+		mongoCollection = mongoDatabase.getCollection(collection);
 	}
-	
+
 	public void insertJson(String json) {
-		getCollection();
-		mc.insertOne(Document.parse(json));
+		mongoCollection.insertOne(Document.parse(json));
+	}
+
+	public FindIterable<Document> queryCollection() {
+		return mongoCollection.find();
 	}
 	
-	public FindIterable<Document> queryCollection() {
-		getCollection();
-		return mc.find();
+	public String getNamespace() {
+		return mongoCollection.getNamespace().getFullName();
 	}
 }
