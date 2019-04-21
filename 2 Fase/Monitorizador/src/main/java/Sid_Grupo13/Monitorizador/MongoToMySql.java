@@ -15,14 +15,15 @@ public class MongoToMySql {
 		MySqlConnector mysqlConnector = new MySqlConnector("jdbc:mariadb://localhost:3306/mongo", "root", "123");
 		MongoConnector mongoConnector = new MongoConnector("teste", "sensor");
 		FindIterable<Document> found = mongoConnector.queryCollection();
-		
+
 		for (Document d : found) {
 			Timestamp timestamp = getTimestamp(d.getString("dat"), d.getString("tim"));
+			int id = Integer.parseInt(d.getString("readid"));
 			double light = Double.parseDouble(d.getString("cell"));
 			double temperature = Double.parseDouble(d.getString("tmp"));
-			
-			mysqlConnector.insert("temperatura", timestamp, temperature);
-			mysqlConnector.insert("luz", timestamp, light);
+
+			mysqlConnector.insert("temperatura", id, timestamp, temperature);
+			mysqlConnector.insert("luz", id, timestamp, light);
 		}
 	}
 

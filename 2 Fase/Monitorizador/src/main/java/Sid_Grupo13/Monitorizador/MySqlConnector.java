@@ -40,15 +40,15 @@ public class MySqlConnector {
 			return resultSet.getInt(1);
 		} catch (SQLException e) {
 			e.printStackTrace();
-			
+
 			return 0;
 		}
 	}
-	
-	public void insert(String table, Timestamp timestamp, double value) {
+
+	public void insert(String table, int id, Timestamp timestamp, double value) {
 		try {
 			PreparedStatement statement = connection.prepareStatement("insert into " + table + " values(?,?,?);");
-			statement.setInt(1, maxId(table) + 1);
+			statement.setInt(1, id);
 			statement.setTimestamp(2, timestamp);
 			statement.setDouble(3, value);
 			statement.execute();
