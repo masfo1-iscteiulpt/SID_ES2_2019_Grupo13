@@ -11,7 +11,7 @@ public class Poller {
 	String topic;
 	String broker;
 	String clientId;
-	MemoryPersistence persistence = new MemoryPersistence();
+	int qos = 0;
 	MqttClient sampleClient;
 	MqttConnectOptions connOpts;
 
@@ -20,7 +20,7 @@ public class Poller {
 			this.topic = topic;
 			this.broker = broker;
 			this.clientId = clientId;
-			sampleClient = new MqttClient(broker, clientId, persistence);
+			sampleClient = new MqttClient(broker, clientId);
 			sampleClient.setCallback(callback);
 			connOpts = new MqttConnectOptions();
 			connOpts.setCleanSession(true);
@@ -47,7 +47,7 @@ public class Poller {
 
 	public void subscribe() {
 		try {
-			sampleClient.subscribe(topic);
+			sampleClient.subscribe(topic,qos);
 		} catch (MqttException me) {
 			exeptionMessage(me);
 		}
