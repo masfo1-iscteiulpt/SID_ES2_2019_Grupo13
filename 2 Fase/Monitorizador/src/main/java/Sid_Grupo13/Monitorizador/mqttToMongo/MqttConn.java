@@ -9,6 +9,7 @@ import org.eclipse.paho.client.mqttv3.MqttCallback;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.mongodb.BasicDBObject;
 import com.mongodb.client.FindIterable;
 
 import Sid_Grupo13.Monitorizador.MongoConnector;
@@ -31,18 +32,4 @@ public class MqttConn {
 		p.disconnect();
 	}
 	
-	public static int getIndex(MongoConnector mconn) {
-		mconn.getCollection("index");
-		FindIterable<Document> index=mconn.queryCollection();
-		Document d=index.first();
-		return Integer.parseInt(d.get("index", String.class));
-	}
-	
-	public static void incrementIndex(MongoConnector mconn) {
-		mconn.getCollection("index");
-		FindIterable<Document> index=mconn.queryCollection();
-		Document d=index.first();
-		int i=Integer.parseInt(d.get("index", String.class));
-		i++;
-	}
 }

@@ -84,9 +84,11 @@ public class MongoMqttCallback implements MqttCallback{
 	
 	private void store(Leitura even) {
 		if(even!=null) {
-			int index=MqttConn.getIndex(mconn);
+			int index=mconn.getIndex();
 			System.out.println(even.toMongoString(index));
 			//acabar esta funcao e o increment index
+		}else {
+			System.out.println("todos os elementos invalidos(demasiada variacao)");
 		}
 	}
 

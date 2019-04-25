@@ -2,6 +2,7 @@ package Sid_Grupo13.Monitorizador;
 
 import org.bson.Document;
 
+import com.mongodb.BasicDBObject;
 import com.mongodb.MongoClient;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
@@ -17,7 +18,7 @@ public class MongoConnector {
 	
 	public static void main(String[] args) {
 		MongoConnector mconn = new MongoConnector("Leituras");
-		int id=MqttConn.getIndex(mconn);
+		int id=mconn.getIndex();
 		mconn.getCollection("sensor");
 		mconn.insertJson("{\"readid\":\"2\",\"tmp\":\"21.40\",\"dat\":\"11/4/2019\",\"tim\":\"14:00:32\",\"cell\":\"2138\"}");
 		
@@ -41,5 +42,22 @@ public class MongoConnector {
 	
 	public String getNamespace() {
 		return mongoCollection.getNamespace().getFullName();
+	}
+	
+	public int getIndex() {
+		this.getCollection("index");
+		FindIterable<Document> index=this.queryCollection();
+		Document d=index.first();
+		return Integer.parseInt(d.get("index", String.class));
+	}
+	
+	public void incrementIndex() {
+		int i=getIndex();
+		i++;
+		BasicDBObject newDocument = new BasicDBObject();
+		newDocument.put("index","\""+i+"\"");
+		BasicDBObject searchQuery = new BasicDBObject().append("hosting", "hostB");
+		//pode nao funcionar corretamente corrigir mais tarde
+		mongoCollection.updateOne(searchQuery, newDocument);
 	}
 }
