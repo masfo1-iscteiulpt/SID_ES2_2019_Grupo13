@@ -13,7 +13,8 @@ public class MongoToMySql {
 
 	public static void main(String[] args) throws InterruptedException, ParseException {
 		MySqlConnector mysqlConnector = new MySqlConnector("jdbc:mariadb://localhost:3306/mongo", "root", "123");
-		MongoConnector mongoConnector = new MongoConnector("teste", "sensor");
+		MongoConnector mongoConnector = new MongoConnector("teste");
+		mongoConnector.getCollection("sensor");
 		FindIterable<Document> found = mongoConnector.queryCollection();
 
 		for (Document d : found) {
