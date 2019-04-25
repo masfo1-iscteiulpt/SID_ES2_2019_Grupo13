@@ -1,4 +1,4 @@
-package Sid_Grupo13.Monitorizador;
+package Sid_Grupo13.Monitorizador.models;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 

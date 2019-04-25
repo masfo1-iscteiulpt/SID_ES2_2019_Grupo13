@@ -1,4 +1,4 @@
-package Sid_Grupo13.Monitorizador;
+package Sid_Grupo13.Monitorizador.mqttToMongo;
 
 import org.eclipse.paho.client.mqttv3.MqttCallback;
 import org.eclipse.paho.client.mqttv3.MqttClient;

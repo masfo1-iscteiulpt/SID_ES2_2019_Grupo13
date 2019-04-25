@@ -7,6 +7,8 @@ import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 
+import Sid_Grupo13.Monitorizador.mqttToMongo.MqttConn;
+
 public class MongoConnector {
 
 	private MongoClient mongoClient;
