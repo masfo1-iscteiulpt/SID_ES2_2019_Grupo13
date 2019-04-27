@@ -14,6 +14,7 @@ import Sid_Grupo13.Monitorizador.models.Leitura;
 public class MongoMqttCallback implements MqttCallback{
 	ArrayList<MqttMessage> list = new ArrayList<MqttMessage>();
 	MongoConnector mconn;
+	public Poller p;
 	public MongoMqttCallback(MongoConnector mconn) {
 		this.mconn=mconn;
 	}
@@ -25,17 +26,18 @@ public class MongoMqttCallback implements MqttCallback{
 	}
 
 	private void validateAndStore() {
-		ArrayList<Leitura> parsedlist=new ArrayList<Leitura>();
 		if(list.size()==MqttConn.samplesize) {
+			ArrayList<Leitura> parsedlist=new ArrayList<Leitura>();
 			for(MqttMessage msg:list) {
-				System.out.println(msg.toString());
+				System.out.println(msg.toString().replace("\"sens", ",\"sens"));
 				try {
-					Leitura l=validate(msg.toString());
+					Leitura l=validate(msg.toString().replace("\"sens", ",\"sens"));
 					parsedlist.add(l);
-					System.out.println("");
+					System.out.println("added");
 				} catch (Exception e) {
 					System.out.println("removida");
 					list.remove(msg);
+					e.printStackTrace();
 				}
 			}
 			store(even(parsedlist));
@@ -61,15 +63,15 @@ public class MongoMqttCallback implements MqttCallback{
 			count = 0.0;
 			cellsum = 0.0;
 			for(Leitura l:parsedlist) {
-				tmpsum+=l.tmp;
-				cellsum+=l.cell;
+				tmpsum+=l.getTmp();
+				cellsum+=l.getCell();
 				count++;
 			}
 			tmpsum/=count;
 			cellsum/=count;
 			for(Leitura l:parsedlist) {
-				if((((Math.abs((l.tmp-tmpsum)*100))/(tmpsum))>MqttConn.percentagediff)||
-						(((Math.abs((l.cell-cellsum)*100))/(cellsum))>MqttConn.percentagediff)){
+				if((((Math.abs((l.getTmp()-tmpsum)*100))/(tmpsum))>MqttConn.percentagediff)||
+						(((Math.abs((l.getCell()-cellsum)*100))/(cellsum))>MqttConn.percentagediff)){
 					repeat=true;
 					parsedlist.remove(l);
 				}
@@ -77,7 +79,7 @@ public class MongoMqttCallback implements MqttCallback{
 		}
 		if(!parsedlist.isEmpty()) {
 		Leitura last=parsedlist.get(parsedlist.size());
-		return new Leitura(tmpsum,last.tim,last.dat,cellsum.intValue());
+		return new Leitura(tmpsum,last.getTim(),last.getDat(),cellsum.intValue());
 		}
 		return null;
 	}
@@ -98,6 +100,5 @@ public class MongoMqttCallback implements MqttCallback{
 
 	@Override
 	public void connectionLost(Throwable cause) {
-		System.exit(0);
 	}
 }
