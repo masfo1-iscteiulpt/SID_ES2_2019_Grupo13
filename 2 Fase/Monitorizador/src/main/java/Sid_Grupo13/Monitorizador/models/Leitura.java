@@ -8,10 +8,24 @@ public class Leitura {
 	
 	@JsonProperty(required=true)
 	private Double tmp;
+	private Double hum;
 	private String tim;
 	private String dat;
 	private Integer cell;
+	private String sens;
 	
+	public Double getHum() {
+		return hum;
+	}
+	public void setHum(Double hum) {
+		this.hum = hum;
+	}
+	public String getSens() {
+		return sens;
+	}
+	public void setSens(String sens) {
+		this.sens = sens;
+	}
 	public Double getTmp() {
 		return tmp;
 	}
@@ -50,16 +64,20 @@ public class Leitura {
 		return (tmp!=null&&tim!=null&&dat!=null&&cell!=null);
 	}
 	public String toMongoString(int index) {
-		return "{\"readid\":\""
+		return "{\"readid\":"
 				+index+
-				"\",\"tmp\":\""
+				",\"tmp\":"
 				+tmp+
-				"\",\"dat\":\""
+				",\"hum\":"
+				+hum+
+				",\"dat\":\""
 				+dat+
 				"\",\"tim\":\""
 				+tim+
-				"\",\"cell\":\""
+				"\",\"cell\":"
 				+cell+
+				",\"sens\":\""
+				+sens+
 				"\"}";
 	}
 }

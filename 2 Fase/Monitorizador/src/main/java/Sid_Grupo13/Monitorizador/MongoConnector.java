@@ -7,6 +7,7 @@ import com.mongodb.MongoClient;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
+import com.mongodb.client.model.Filters;
 
 import Sid_Grupo13.Monitorizador.mqttToMongo.MqttConn;
 
@@ -48,16 +49,26 @@ public class MongoConnector {
 		this.getCollection("index");
 		FindIterable<Document> index=this.queryCollection();
 		Document d=index.first();
-		return Integer.parseInt(d.get("index", String.class));
+		return (d.get("index", Integer.class));
 	}
 	
 	public void incrementIndex() {
 		int i=getIndex();
 		i++;
-		BasicDBObject newDocument = new BasicDBObject();
-		newDocument.put("index","\""+i+"\"");
-		BasicDBObject searchQuery = new BasicDBObject().append("hosting", "hostB");
-		//pode nao funcionar corretamente corrigir mais tarde
-		mongoCollection.updateOne(searchQuery, newDocument);
+		mongoCollection.replaceOne(Filters.exists("index"),new Document("index",i) );
+		
+	}
+	
+	public int getLastExported() {
+		this.getCollection("last_exported");
+		FindIterable<Document> index=this.queryCollection();
+		Document d=index.first();
+		return (d.get("last_exported", Integer.class));
+	}
+	
+	public void incrementLastExported(int last) {
+		getCollection("last_exported");
+		mongoCollection.replaceOne(Filters.exists("last_exported"),new Document("last_exported",last) );
+		
 	}
 }
