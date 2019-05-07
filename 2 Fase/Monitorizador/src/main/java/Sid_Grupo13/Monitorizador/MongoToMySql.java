@@ -12,19 +12,19 @@ import com.mongodb.client.FindIterable;
 public class MongoToMySql {
 
 	public static void main(String[] args) throws InterruptedException, ParseException {
-		MySqlConnector mysqlConnector = new MySqlConnector("jdbc:mariadb://localhost:3306/mongo", "root", "123");
-		MongoConnector mongoConnector = new MongoConnector("teste");
+		MySqlConnector mysqlConnector = new MySqlConnector("jdbc:mariadb://localhost:3306/dbsid", "root", "");
+		MongoConnector mongoConnector = new MongoConnector("Leituras");
 		mongoConnector.getCollection("sensor");
 		FindIterable<Document> found = mongoConnector.queryCollection();
 
 		for (Document d : found) {
 			Timestamp timestamp = getTimestamp(d.getString("dat"), d.getString("tim"));
-			int id = Integer.parseInt(d.getString("readid"));
-			double light = Double.parseDouble(d.getString("cell"));
-			double temperature = Double.parseDouble(d.getString("tmp"));
+			int id = d.getInteger("readid");
+			double light = (d.getInteger("cell"));
+			double temperature = (d.getDouble("tmp"));
 
-			mysqlConnector.insert("temperatura", id, timestamp, temperature);
-			mysqlConnector.insert("luz", id, timestamp, light);
+			mysqlConnector.insert("medicoestemperatura", id, timestamp, temperature);
+			mysqlConnector.insert("medicoesluminosidade", id, timestamp, light);
 		}
 	}
 
