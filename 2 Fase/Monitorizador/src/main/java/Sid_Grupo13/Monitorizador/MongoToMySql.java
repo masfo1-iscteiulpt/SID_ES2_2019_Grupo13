@@ -78,16 +78,30 @@ public class MongoToMySql {
 	private void store(Leitura even) {
 		if (even != null) {
 			System.out.println(even.toMongoStringCurrentID());
+			mongoConnector.incrementLastExported(even.getId());
+
+			Timestamp timestamp = getTimestamp(even.getDat(), even.getTim());
+			int id = even.getId();
+			double light = (even.getCell());
+			double temperature = (even.getTmp());
+	
+			mysqlConnector.insert("medicoestemperatura", id, timestamp, temperature);
+			mysqlConnector.insert("medicoesluminosidade", id, timestamp, light);
 			// acabar esta funcao e o increment index
 		} else {
 			System.out.println("todos os elementos invalidos(demasiada variacao)");
 		}
 	}
 
-	public static Timestamp getTimestamp(String day, String hour) throws ParseException {
+	public static Timestamp getTimestamp(String day, String hour) {
 		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
 		String timestamp = day + " " + hour;
-		Date date = simpleDateFormat.parse(timestamp);
+		Date date;
+		try {
+			date = simpleDateFormat.parse(timestamp);
+		} catch (ParseException e) {
+			date = new Date(System.currentTimeMillis());
+		}
 
 		return new Timestamp(date.getTime());
 	}
