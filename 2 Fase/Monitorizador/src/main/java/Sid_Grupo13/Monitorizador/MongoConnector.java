@@ -41,6 +41,12 @@ public class MongoConnector {
 		return mongoCollection.find();
 	}
 	
+	public FindIterable<Document> queryFromLastExported(){
+		int value= getLastExported();
+		this.getCollection("sensor");
+		return mongoCollection.find(Filters.gt("readid", value));
+	}
+	
 	public String getNamespace() {
 		return mongoCollection.getNamespace().getFullName();
 	}

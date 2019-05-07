@@ -13,7 +13,14 @@ public class Leitura {
 	private String dat;
 	private Integer cell;
 	private String sens;
+	private int id;
 	
+	public int getId() {
+		return id;
+	}
+	public void setId(int id) {
+		this.id = id;
+	}
 	public Double getHum() {
 		return hum;
 	}
@@ -60,6 +67,13 @@ public class Leitura {
 		this.dat=dat;
 		this.cell=cell;
 	}
+	public Leitura(Double tmp,String tim,String dat,Integer cell,int id) {
+		this.tmp=tmp;
+		this.tim=tim;
+		this.dat=dat;
+		this.cell=cell;
+		this.id=id;
+	}
 	public boolean validate() {
 		return (tmp!=null&&tim!=null&&dat!=null&&cell!=null);
 	}
@@ -80,4 +94,22 @@ public class Leitura {
 				+sens+
 				"\"}";
 	}
+	public String toMongoStringCurrentID() {
+		return "{\"id\":"
+				+id+
+				",\"tmp\":"
+				+tmp+
+				",\"hum\":"
+				+hum+
+				",\"dat\":\""
+				+dat+
+				"\",\"tim\":\""
+				+tim+
+				"\",\"cell\":"
+				+cell+
+				",\"sens\":\""
+				+sens+
+				"\"}";
+	}
+	
 }
