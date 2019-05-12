@@ -2,7 +2,7 @@
 
 	$username = $_GET['username'];
 	$password = $_GET['password'];
-	$id= $_GET['idCultura'];
+	$date= $_GET['date'];
 	$url = 'localhost';
 	$conn = mysqli_connect($url, $username, $password);
 
@@ -10,7 +10,7 @@
 		die("ConnectionFailled: " . $conn->connect_error);
 	}
 	
-	$sql = "call getInformacaoCultura(".$id.");";
+	$sql = "call getAlertasGlobais(".$date.");";
 	$result = mysqli_query($conn, $sql);
 	$rows = array();
 	if ($result) {

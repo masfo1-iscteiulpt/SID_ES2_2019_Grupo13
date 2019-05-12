@@ -11,8 +11,7 @@
 		die("ConnectionFailled: " . $conn->connect_error);
 	}
 	
-	//criar nova stored procedure que Retorna todos os alertas de uma determinada cultura numa determinada data
-	$sql = "call select_alerta(".$id.",".$date.");";
+	$sql = "call getAlertasCultura(".$id.",".$date.");";
 	$result = mysqli_query($conn, $sql);
 	$rows = array();
 	if ($result) {

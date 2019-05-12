@@ -9,7 +9,6 @@
 		die("ConnectionFailled: " . $conn->connect_error);
 	}
 	
-	//criar nova stored procedures que retorna o select dos ids das culturas dos users
 	$sql = "call select_culturas();";
 	$result = mysqli_query($conn, $sql);
 	$rows = array();
