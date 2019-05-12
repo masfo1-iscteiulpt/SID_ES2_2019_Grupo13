@@ -35,8 +35,10 @@ public class MainController implements Initializable {
 	public TextField name;
 	public TextField categoria;
 	public TextField username;
+	public TextField variableName;
 
 	public VBox createUser;
+	public VBox createVariable;
 	public VBox variablesPane;
 	public VBox usersPane;
 
@@ -44,7 +46,8 @@ public class MainController implements Initializable {
 		connect();
 		setUpVariablesTable();
 		setUpUsersTable();
-		populateTables();
+		populateUsers();
+		populateVariables();
 		showVariables();
 	}
 
@@ -90,7 +93,7 @@ public class MainController implements Initializable {
 		usersTable.getColumns().addAll(emailColumn, nameColumn, categoriaColumn, usernameColumn);
 	}
 
-	private void populateTables() {
+	private void populateUsers() {
 		usersTable.getItems().clear();
 		try {
 			PreparedStatement statement = connection.prepareStatement("SELECT * FROM utilizador;");
@@ -98,6 +101,19 @@ public class MainController implements Initializable {
 			while (set.next())
 				usersTable.getItems()
 						.add(new User(set.getString(1), set.getString(2), set.getString(3), set.getString(4)));
+			statement.execute();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+
+	private void populateVariables() {
+		variablesTable.getItems().clear();
+		try {
+			PreparedStatement statement = connection.prepareStatement("SELECT * FROM variavel;");
+			ResultSet set = statement.executeQuery();
+			while (set.next())
+				variablesTable.getItems().add(new Variable(set.getInt(1), set.getString(2)));
 			statement.execute();
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -134,7 +150,7 @@ public class MainController implements Initializable {
 			PreparedStatement statement = connection
 					.prepareStatement("CALL cria_utilizador(" + e + n + c + u + p + ");");
 			statement.execute();
-			populateTables();
+			populateUsers();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -165,5 +181,28 @@ public class MainController implements Initializable {
 				e.printStackTrace();
 			}
 		}
+	}
+
+	public void createVariable() {
+		createVariable.toFront();
+	}
+
+	public void addVariable() {
+		try {
+			String v = "\"" + variableName.getText() + "\"";
+			PreparedStatement statement = connection
+					.prepareStatement("INSERT INTO variavel VALUES(NULL, " + v + ");");
+			statement.execute();
+			populateVariables();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		cancelVariable();
+	}
+
+	public void cancelVariable() {
+		variableName.clear();
+		createUser.toBack();
 	}
 }
