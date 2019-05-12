@@ -10,8 +10,7 @@
 		die("ConnectionFailled: " . $conn->connect_error);
 	}
 	
-	//criar nova stored procedure que devolve a informacao de uma cultura identificada pelo id
-	$sql = "call select_cultura(".$id.");";
+	$sql = "call getInformacaoCultura(".$id.");";
 	$result = mysqli_query($conn, $sql);
 	$rows = array();
 	if ($result) {
