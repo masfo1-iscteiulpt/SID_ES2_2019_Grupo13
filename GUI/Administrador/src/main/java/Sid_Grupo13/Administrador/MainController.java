@@ -191,7 +191,7 @@ public class MainController implements Initializable {
 		try {
 			String v = "\"" + variableName.getText() + "\"";
 			PreparedStatement statement = connection
-					.prepareStatement("INSERT INTO variavel VALUES(NULL, " + v + ");");
+					.prepareStatement("INSERT INTO variavel VALUES(1, " + v + ");");
 			statement.execute();
 			populateVariables();
 		} catch (SQLException e) {
