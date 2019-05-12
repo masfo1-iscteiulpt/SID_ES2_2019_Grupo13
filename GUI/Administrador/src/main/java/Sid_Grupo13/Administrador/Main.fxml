@@ -31,44 +31,6 @@
       </VBox>
       <StackPane HBox.hgrow="ALWAYS">
          <children>
-            <VBox fx:id="usersPane" minHeight="-Infinity" minWidth="500.0" prefHeight="450.0" spacing="20.0" style="-fx-background-color: #ffffff;">
-               <children>
-                  <Label text="Gestão de utilizadores">
-                     <font>
-                        <Font size="24.0" />
-                     </font>
-                     <VBox.margin>
-                        <Insets top="20.0" />
-                     </VBox.margin>
-                  </Label>
-                  <TableView fx:id="usersTable" prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />
-                  <HBox alignment="CENTER_LEFT" spacing="30.0">
-                     <children>
-                        <Button mnemonicParsing="false" onAction="#createUser" style="-fx-background-color: #05BC78;" text="Criar" textFill="WHITE">
-                           <font>
-                              <Font name="System Bold" size="12.0" />
-                           </font>
-                        </Button>
-                        <Button mnemonicParsing="false" style="-fx-background-color: #05BC78;" text="Alterar" textFill="WHITE">
-                           <font>
-                              <Font name="System Bold" size="12.0" />
-                           </font>
-                        </Button>
-                        <Button mnemonicParsing="false" style="-fx-background-color: #ff0505;" text="Apagar" textFill="WHITE">
-                           <font>
-                              <Font name="System Bold" size="12.0" />
-                           </font>
-                        </Button>
-                     </children>
-                     <VBox.margin>
-                        <Insets bottom="20.0" />
-                     </VBox.margin>
-                  </HBox>
-               </children>
-               <padding>
-                  <Insets left="20.0" right="20.0" />
-               </padding>
-            </VBox>
             <VBox fx:id="variablesPane" minHeight="-Infinity" minWidth="500.0" prefHeight="450.0" spacing="20.0" style="-fx-background-color: #ffffff;">
                <children>
                   <Label text="Gestão de variáveis">
@@ -156,6 +118,44 @@
                      </children>
                   </HBox>
                </children>
+            </VBox>
+            <VBox fx:id="usersPane" minHeight="-Infinity" minWidth="500.0" prefHeight="450.0" spacing="20.0" style="-fx-background-color: #ffffff;">
+               <children>
+                  <Label text="Gestão de utilizadores">
+                     <font>
+                        <Font size="24.0" />
+                     </font>
+                     <VBox.margin>
+                        <Insets top="20.0" />
+                     </VBox.margin>
+                  </Label>
+                  <TableView fx:id="usersTable" prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />
+                  <HBox alignment="CENTER_LEFT" spacing="30.0">
+                     <children>
+                        <Button mnemonicParsing="false" onAction="#createUser" style="-fx-background-color: #05BC78;" text="Criar" textFill="WHITE">
+                           <font>
+                              <Font name="System Bold" size="12.0" />
+                           </font>
+                        </Button>
+                        <Button mnemonicParsing="false" style="-fx-background-color: #05BC78;" text="Alterar" textFill="WHITE">
+                           <font>
+                              <Font name="System Bold" size="12.0" />
+                           </font>
+                        </Button>
+                        <Button mnemonicParsing="false" onAction="#deleteUser" style="-fx-background-color: #ff0505;" text="Apagar" textFill="WHITE">
+                           <font>
+                              <Font name="System Bold" size="12.0" />
+                           </font>
+                        </Button>
+                     </children>
+                     <VBox.margin>
+                        <Insets bottom="20.0" />
+                     </VBox.margin>
+                  </HBox>
+               </children>
+               <padding>
+                  <Insets left="20.0" right="20.0" />
+               </padding>
             </VBox>
          </children>
       </StackPane>

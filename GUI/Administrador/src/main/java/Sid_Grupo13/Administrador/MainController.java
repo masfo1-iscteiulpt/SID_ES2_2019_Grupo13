@@ -8,6 +8,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
 
+import javafx.collections.ObservableList;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
@@ -148,5 +149,21 @@ public class MainController implements Initializable {
 		username.clear();
 		password.clear();
 		createUser.toBack();
+	}
+
+	public void deleteUser() {
+		ObservableList<User> all = usersTable.getItems();
+		ObservableList<User> selected = usersTable.getSelectionModel().getSelectedItems();
+
+		for (User user : selected) {
+			try {
+				PreparedStatement statement = connection
+						.prepareStatement("CALL apaga_utilizador(\"" + user.getUsername() + "\");");
+				statement.execute();
+				all.remove(user);
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 }
