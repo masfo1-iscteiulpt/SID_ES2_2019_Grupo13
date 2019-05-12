@@ -21,9 +21,9 @@ public class LoginController {
 		Parent root = loader.load();
 
 		stage.setTitle("Culturas");
-		stage.setMinHeight(450);
-		stage.setMinWidth(650);
-		stage.setResizable(false);
+		stage.setMinHeight(480);
+		stage.setMinWidth(680);
+//		stage.setResizable(false);
 
 		stage.setScene(new Scene(root));
 		((Stage) ((Node) actionEvent.getSource()).getScene().getWindow()).close();
