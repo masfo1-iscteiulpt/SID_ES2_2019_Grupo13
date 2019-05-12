@@ -27,7 +27,7 @@
       </VBox>
       <StackPane HBox.hgrow="ALWAYS">
          <children>
-            <VBox fx:id="variablesPane" minHeight="-Infinity" minWidth="500.0" prefHeight="450.0" spacing="20.0" style="-fx-background-color: #ffffff;">
+            <VBox fx:id="culturasPane" minHeight="-Infinity" minWidth="500.0" prefHeight="450.0" spacing="20.0" style="-fx-background-color: #ffffff;">
                <children>
                   <Label text="Gestão de culturas">
                      <VBox.margin>
@@ -37,7 +37,7 @@
                         <Font size="24.0" />
                      </font>
                   </Label>
-                  <TableView fx:id="culturassTable" editable="true" VBox.vgrow="ALWAYS" />
+                  <TableView fx:id="culturasTable" editable="true" VBox.vgrow="ALWAYS" />
                   <HBox alignment="CENTER_LEFT" spacing="30.0">
                      <children>
                         <Button mnemonicParsing="false" style="-fx-background-color: #05BC78;" text="Criar" textFill="WHITE">
@@ -65,7 +65,7 @@
                   <Insets left="20.0" right="20.0" />
                </padding>
             </VBox>
-            <VBox fx:id="usersPane" minHeight="-Infinity" minWidth="500.0" prefHeight="450.0" spacing="20.0" style="-fx-background-color: #ffffff;">
+            <VBox fx:id="medicoesPane" minHeight="-Infinity" minWidth="500.0" prefHeight="450.0" spacing="20.0" style="-fx-background-color: #ffffff;">
                <children>
                   <Label text="Gestão das medições">
                      <font>
