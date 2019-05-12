@@ -190,8 +190,7 @@ public class MainController implements Initializable {
 	public void addVariable() {
 		try {
 			String v = "\"" + variableName.getText() + "\"";
-			PreparedStatement statement = connection
-					.prepareStatement("INSERT INTO variavel VALUES(1, " + v + ");");
+			PreparedStatement statement = connection.prepareStatement("INSERT INTO variavel VALUES(null, " + v + ");");
 			statement.execute();
 			populateVariables();
 		} catch (SQLException e) {
@@ -204,5 +203,21 @@ public class MainController implements Initializable {
 	public void cancelVariable() {
 		variableName.clear();
 		createUser.toBack();
+	}
+
+	public void deleteVariable() {
+		ObservableList<Variable> all = variablesTable.getItems();
+		ObservableList<Variable> selected = variablesTable.getSelectionModel().getSelectedItems();
+
+		for (Variable variable : selected) {
+			try {
+				PreparedStatement statement = connection
+						.prepareStatement("DELETE FROM variavel WHERE IDvariavel = " + variable.getId() + ";");
+				statement.execute();
+				all.remove(variable);
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 }

@@ -54,7 +54,7 @@
                               <Font name="System Bold" size="12.0" />
                            </font>
                         </Button>
-                        <Button mnemonicParsing="false" style="-fx-background-color: #ff0505;" text="Apagar" textFill="WHITE">
+                        <Button mnemonicParsing="false" onAction="#deleteVariable" style="-fx-background-color: #ff0505;" text="Apagar" textFill="WHITE">
                            <font>
                               <Font name="System Bold" size="12.0" />
                            </font>
