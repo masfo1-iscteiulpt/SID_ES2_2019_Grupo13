@@ -16,12 +16,12 @@ public class MainController implements Initializable {
 
 	public TableView<Cultura> culturasTable;
 	public TableView<Medicao> medicoesTable;
-	
+
 	public VBox culturasPane;
 	public VBox medicoesPane;
 
 	public void initialize(URL location, ResourceBundle resources) {
-
+		showCulturas();
 	}
 
 	public void showCulturas() {
