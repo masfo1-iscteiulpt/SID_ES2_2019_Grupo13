@@ -19,7 +19,7 @@ public class Main extends Application {
 		loader.setLocation(getClass().getResource("Login.fxml"));
 		Parent root = loader.load();
 
-		primaryStage.setTitle("Culturas");
+		primaryStage.setTitle("Estufex for Investigator");
 		primaryStage.setMinHeight(490);
 		primaryStage.setMinWidth(370);
 
