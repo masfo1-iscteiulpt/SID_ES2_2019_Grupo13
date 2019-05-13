@@ -292,7 +292,7 @@ public class MainController implements Initializable {
 
 	public void createMedicao() {
 		try {
-			String v = "\"" + medicaoValor.getText() + "\", ";
+			String v = medicaoValor.getText() + ", ";
 			String c = medicaoCultura.getValue().split(" - ")[0] + ", ";
 			String var = medicaoVariavel.getValue().split(" - ")[0];
 			PreparedStatement statement = connection.prepareStatement("CALL insere_medicao(" + v + c + var + ");");
