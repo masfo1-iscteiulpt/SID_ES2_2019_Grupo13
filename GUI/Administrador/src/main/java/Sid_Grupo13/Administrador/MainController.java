@@ -2,7 +2,6 @@ package Sid_Grupo13.Administrador;
 
 import java.net.URL;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -42,21 +41,16 @@ public class MainController implements Initializable {
 	public VBox variablesPane;
 	public VBox usersPane;
 
+	public MainController(Connection connection) {
+		this.connection = connection;
+	}
+
 	public void initialize(URL location, ResourceBundle resources) {
-		connect();
 		setUpVariablesTable();
 		setUpUsersTable();
 		populateUsers();
 		populateVariables();
 		showVariables();
-	}
-
-	private void connect() {
-		try {
-			connection = DriverManager.getConnection("jdbc:mariadb://localhost:3306/teste3?user=root&password=123");
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
 	}
 
 	@SuppressWarnings("unchecked")
