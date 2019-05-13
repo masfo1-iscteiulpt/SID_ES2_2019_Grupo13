@@ -1,0 +1,7 @@
+Os construtores necessitam de todos os parâmetros passados para representar corretamente
+os tipos de dados situados na base de dados.
+
+MainController é uma classe que contém todas as ações que uma dada janela pode apresentar,
+dados que JavaFX só permite ter um Controller por janela é inevitável a concentração dos
+métodos numa só classe para garantir o correto funcionamento do GUI.
+Este facto também leva ao aumento da complexidade ciclomática da classe.
