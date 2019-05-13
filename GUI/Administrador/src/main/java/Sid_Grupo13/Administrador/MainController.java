@@ -21,6 +21,8 @@ import javafx.scene.paint.Paint;
 public class MainController implements Initializable {
 
 	private Connection connection;
+	private String selectedUser;
+	private int selectedVariable;
 
 	public Button showVariables;
 	public Button showUsers;
@@ -35,11 +37,17 @@ public class MainController implements Initializable {
 	public TextField categoria;
 	public TextField username;
 	public TextField variableName;
+	public TextField emailAlter;
+	public TextField nameAlter;
+	public TextField categoriaAlter;
+	public TextField variableNameAlter;
 
 	public VBox createUser;
 	public VBox createVariable;
 	public VBox variablesPane;
 	public VBox usersPane;
+	public VBox alterarUser;
+	public VBox alterarVariable;
 
 	public MainController(Connection connection) {
 		this.connection = connection;
@@ -161,6 +169,45 @@ public class MainController implements Initializable {
 		createUser.toBack();
 	}
 
+	public void alterarUserMenu() {
+		ObservableList<User> selected = usersTable.getSelectionModel().getSelectedItems();
+		if (selected.size() > 0) {
+			User user = selected.get(0);
+			selectedUser = user.getUsername();
+
+			emailAlter.setText(user.getEmail());
+			nameAlter.setText(user.getNomeUtilizador());
+			categoriaAlter.setText(user.getCategoriaProfissional());
+
+			alterarUser.toFront();
+		}
+	}
+
+	public void addAlterarUser() {
+		try {
+			String e = "\"" + emailAlter.getText() + "\"";
+			String n = "\"" + nameAlter.getText() + "\"";
+			String c = "\"" + categoriaAlter.getText() + "\"";
+			PreparedStatement statement = connection
+					.prepareStatement("UPDATE `utilizador` SET `Email`=" + e + ", `NomeUtilizador`=" + n
+							+ ", `CategoriaProfissional`=" + c + " WHERE `username`=\"" + selectedUser + "\";");
+			statement.execute();
+			populateUsers();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		cancelAlterarUser();
+	}
+
+	public void cancelAlterarUser() {
+		emailAlter.clear();
+		nameAlter.clear();
+		categoriaAlter.clear();
+
+		alterarUser.toBack();
+	}
+
 	public void deleteUser() {
 		ObservableList<User> all = usersTable.getItems();
 		ObservableList<User> selected = usersTable.getSelectionModel().getSelectedItems();
@@ -196,7 +243,38 @@ public class MainController implements Initializable {
 
 	public void cancelVariable() {
 		variableName.clear();
-		createUser.toBack();
+		createVariable.toBack();
+	}
+
+	public void alterarVariableMenu() {
+		ObservableList<Variable> selected = variablesTable.getSelectionModel().getSelectedItems();
+		if (selected.size() > 0) {
+			Variable variable = selected.get(0);
+			selectedVariable = variable.getId();
+
+			variableNameAlter.setText(variable.getName());
+
+			alterarVariable.toFront();
+		}
+	}
+
+	public void addAlterarVariable() {
+		try {
+			String n = "\"" + variableNameAlter.getText() + "\"";
+			PreparedStatement statement = connection.prepareStatement(
+					"UPDATE `variavel` SET `NomeVariavel`=" + n + " WHERE `IDvariavel`=" + selectedVariable + ";");
+			statement.execute();
+			populateVariables();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		cancelAlterarVariable();
+	}
+
+	public void cancelAlterarVariable() {
+		variableNameAlter.clear();
+		alterarVariable.toBack();
 	}
 
 	public void deleteVariable() {

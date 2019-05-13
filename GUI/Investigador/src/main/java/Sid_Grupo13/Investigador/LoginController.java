@@ -20,7 +20,7 @@ public class LoginController {
 		loader.setLocation(getClass().getResource("Main.fxml"));
 		Parent root = loader.load();
 
-		stage.setTitle("Culturas");
+		stage.setTitle("Estufex for Investigator");
 		stage.setMinHeight(480);
 		stage.setMinWidth(680);
 //		stage.setResizable(false);
