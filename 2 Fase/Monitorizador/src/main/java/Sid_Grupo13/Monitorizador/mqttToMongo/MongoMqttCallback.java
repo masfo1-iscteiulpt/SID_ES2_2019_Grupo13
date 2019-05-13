@@ -27,7 +27,7 @@ public class MongoMqttCallback implements MqttCallback{
 			mconn.insertJson(l.toMongoString(++i));
 			mconn.incrementIndex();
 		} catch (Exception e) {
-			e.printStackTrace();
+			System.out.println("mensagem descartada: "+message.toString());
 		} 
 	}
 
