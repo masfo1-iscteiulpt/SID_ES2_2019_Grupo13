@@ -23,6 +23,8 @@ public class MainController implements Initializable {
 
 	private Connection connection;
 	private int selectedCultura;
+	private int selectedLimitVar;
+	private int selectedLimitCul;
 
 	public Button showCulturas;
 	public Button showMedicoes;
@@ -39,6 +41,7 @@ public class MainController implements Initializable {
 	public VBox alterCultura;
 	public VBox createMedicao;
 	public VBox createLimite;
+	public VBox alterLimite;
 
 	public TextField culturaName;
 	public TextField culturaDescricao;
@@ -47,6 +50,8 @@ public class MainController implements Initializable {
 	public TextField medicaoValor;
 	public TextField limiteInferior;
 	public TextField limiteSuperior;
+	public TextField limiteInferiorAlter;
+	public TextField limiteSuperiorAlter;
 
 	public ChoiceBox<String> medicaoCultura;
 	public ChoiceBox<String> medicaoVariavel;
@@ -145,6 +150,7 @@ public class MainController implements Initializable {
 	}
 
 	public void populateLimites() {
+		limitesTable.getItems().clear();
 		try {
 			PreparedStatement statement = connection.prepareStatement("CALL select_limites();");
 			ResultSet set = statement.executeQuery();
@@ -300,6 +306,8 @@ public class MainController implements Initializable {
 	}
 
 	public void openCreateLimite() {
+		limiteCultura.getItems().clear();
+		limiteVariavel.getItems().clear();
 		try {
 			PreparedStatement statement = connection.prepareStatement("CALL select_culturas();");
 			ResultSet result = statement.executeQuery();
@@ -343,5 +351,60 @@ public class MainController implements Initializable {
 		limiteVariavel.setValue("");
 
 		createLimite.toBack();
+	}
+
+	public void showAlterLimite() {
+		ObservableList<Limite> selected = limitesTable.getSelectionModel().getSelectedItems();
+
+		if (selected.size() > 0) {
+			Limite limite = selected.get(0);
+			selectedLimitVar = limite.getVariavel();
+			selectedLimitCul = limite.getCultura();
+
+			limiteInferiorAlter.setText(limite.getLimiteInferior() + "");
+			limiteSuperiorAlter.setText(limite.getLimiteSuperior() + "");
+
+			alterLimite.toFront();
+		}
+	}
+
+	public void alterLimite() {
+		try {
+			String li = limiteInferiorAlter.getText();
+			String ls = limiteSuperiorAlter.getText();
+			PreparedStatement statement = connection.prepareStatement("UPDATE `variaveis_medidas` SET `LimiteInferior`="
+					+ li + ", `LimiteSuperior`=" + ls + " WHERE Variavel_IDVariavel=" + selectedLimitVar
+					+ " AND Cultura_IDCultura=" + selectedLimitCul + ";");
+			statement.execute();
+			populateLimites();
+			System.out.println(selectedLimitVar + " " + selectedLimitCul);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		cancelAlterLimite();
+	}
+
+	public void cancelAlterLimite() {
+		limiteInferiorAlter.clear();
+		limiteSuperiorAlter.clear();
+
+		alterLimite.toBack();
+	}
+
+	public void deleteLimite() {
+		ObservableList<Limite> all = limitesTable.getItems();
+		ObservableList<Limite> selected = limitesTable.getSelectionModel().getSelectedItems();
+
+		for (Limite limite : selected) {
+			try {
+				PreparedStatement statement = connection.prepareStatement(
+						"CALL apaga_variavel_medida(" + limite.getVariavel() + ", " + limite.getCultura() + ");");
+				statement.execute();
+				all.remove(limite);
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 }

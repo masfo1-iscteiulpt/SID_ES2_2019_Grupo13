@@ -9,7 +9,7 @@ public class Limite {
 	private String culturaName;
 	private String variavelName;
 
-	public Limite(double limiteInferior, double limiteSuperior, int cultura, int variavel, String culturaName,
+	public Limite(double limiteInferior, double limiteSuperior, int variavel, int cultura, String culturaName,
 			String variavelName) {
 		this.limiteInferior = limiteInferior;
 		this.limiteSuperior = limiteSuperior;
