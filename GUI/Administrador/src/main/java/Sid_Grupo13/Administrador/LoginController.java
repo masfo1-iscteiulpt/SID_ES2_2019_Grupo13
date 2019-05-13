@@ -25,7 +25,7 @@ public class LoginController {
 	@FXML
 	private void login(ActionEvent actionEvent) throws IOException {
 		try {
-			Connection connection = DriverManager.getConnection("jdbc:mariadb://localhost:3306/teste4?user="
+			Connection connection = DriverManager.getConnection("jdbc:mariadb://localhost:3306/teste5?user="
 					+ username.getText() + "&password=" + password.getText());
 
 			((Stage) ((Node) actionEvent.getSource()).getScene().getWindow()).close();

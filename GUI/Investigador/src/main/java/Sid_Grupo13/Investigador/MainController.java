@@ -11,6 +11,7 @@ import java.util.ResourceBundle;
 import javafx.collections.ObservableList;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -25,23 +26,32 @@ public class MainController implements Initializable {
 
 	public Button showCulturas;
 	public Button showMedicoes;
+	public Button showLimites;
 
 	public TableView<Cultura> culturasTable;
 	public TableView<Medicao> medicoesTable;
+	public TableView<Limite> limitesTable;
 
 	public VBox culturasPane;
 	public VBox medicoesPane;
+	public VBox limitesPane;
 	public VBox createCultura;
 	public VBox alterCultura;
 	public VBox createMedicao;
+	public VBox createLimite;
 
 	public TextField culturaName;
 	public TextField culturaDescricao;
 	public TextField alterNameCultura;
 	public TextField alterDescricaoCultura;
 	public TextField medicaoValor;
-	public TextField medicaoCultura;
-	public TextField medicaoVariavel;
+	public TextField limiteInferior;
+	public TextField limiteSuperior;
+
+	public ChoiceBox<String> medicaoCultura;
+	public ChoiceBox<String> medicaoVariavel;
+	public ChoiceBox<String> limiteCultura;
+	public ChoiceBox<String> limiteVariavel;
 
 	public MainController(Connection connection) {
 		this.connection = connection;
@@ -50,8 +60,10 @@ public class MainController implements Initializable {
 	public void initialize(URL location, ResourceBundle resources) {
 		setUpCulturasTable();
 		setUpMedicoesTable();
+		setUpLimitesTable();
 		populateCulturas();
 //		populateVariables();
+		populateLimites();
 		showCulturas();
 	}
 
@@ -97,6 +109,27 @@ public class MainController implements Initializable {
 		medicoesTable.getColumns().addAll(idColumn, dataColumn, valorColumn, idCulturaColumn, idVariavelColumn);
 	}
 
+	@SuppressWarnings("unchecked")
+	public void setUpLimitesTable() {
+		TableColumn<Limite, Double> infColumn = new TableColumn<Limite, Double>("Limite inferior");
+		infColumn.setMinWidth(90);
+		infColumn.setCellValueFactory(new PropertyValueFactory<Limite, Double>("limiteInferior"));
+
+		TableColumn<Limite, Double> supColumn = new TableColumn<Limite, Double>("Limite superior");
+		supColumn.setMinWidth(90);
+		supColumn.setCellValueFactory(new PropertyValueFactory<Limite, Double>("limiteSuperior"));
+
+		TableColumn<Limite, String> varColumn = new TableColumn<Limite, String>("Nome variável");
+		varColumn.setMinWidth(90);
+		varColumn.setCellValueFactory(new PropertyValueFactory<Limite, String>("variavelName"));
+
+		TableColumn<Limite, String> culColumn = new TableColumn<Limite, String>("Nome cultura");
+		culColumn.setMinWidth(90);
+		culColumn.setCellValueFactory(new PropertyValueFactory<Limite, String>("culturaName"));
+
+		limitesTable.getColumns().addAll(infColumn, supColumn, varColumn, culColumn);
+	}
+
 	public void populateCulturas() {
 		culturasTable.getItems().clear();
 		try {
@@ -111,11 +144,26 @@ public class MainController implements Initializable {
 		}
 	}
 
+	public void populateLimites() {
+		try {
+			PreparedStatement statement = connection.prepareStatement("CALL select_limites();");
+			ResultSet set = statement.executeQuery();
+			while (set.next())
+				limitesTable.getItems().add(new Limite(set.getDouble(1), set.getDouble(2), set.getInt(3), set.getInt(4),
+						set.getString(5), set.getString(6)));
+			statement.execute();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+
 	public void showCulturas() {
 		showCulturas.setStyle("-fx-background-color: #ffffff");
 		showCulturas.setTextFill(Paint.valueOf("#000000"));
 		showMedicoes.setStyle("-fx-background-color: #05BC78");
 		showMedicoes.setTextFill(Paint.valueOf("#ffffff"));
+		showLimites.setStyle("-fx-background-color: #05BC78");
+		showLimites.setTextFill(Paint.valueOf("#ffffff"));
 		culturasPane.toFront();
 	}
 
@@ -124,7 +172,19 @@ public class MainController implements Initializable {
 		showMedicoes.setTextFill(Paint.valueOf("#000000"));
 		showCulturas.setStyle("-fx-background-color: #05BC78");
 		showCulturas.setTextFill(Paint.valueOf("#ffffff"));
+		showLimites.setStyle("-fx-background-color: #05BC78");
+		showLimites.setTextFill(Paint.valueOf("#ffffff"));
 		medicoesPane.toFront();
+	}
+
+	public void showLimites() {
+		showLimites.setStyle("-fx-background-color: #ffffff");
+		showLimites.setTextFill(Paint.valueOf("#000000"));
+		showMedicoes.setStyle("-fx-background-color: #05BC78");
+		showMedicoes.setTextFill(Paint.valueOf("#ffffff"));
+		showCulturas.setStyle("-fx-background-color: #05BC78");
+		showCulturas.setTextFill(Paint.valueOf("#ffffff"));
+		limitesPane.toFront();
 	}
 
 	public void openCreateCultura() {
@@ -205,15 +265,31 @@ public class MainController implements Initializable {
 	}
 
 	public void openCreateMedicao() {
+		try {
+			PreparedStatement statement = connection.prepareStatement("CALL select_culturas();");
+			ResultSet result = statement.executeQuery();
+
+			while (result.next())
+				medicaoCultura.getItems().add(result.getInt(1) + " - " + result.getString(2));
+
+			statement = connection.prepareStatement("SELECT * FROM variavel;");
+			result = statement.executeQuery();
+
+			while (result.next())
+				medicaoVariavel.getItems().add(result.getInt(1) + " - " + result.getString(2));
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
 		createMedicao.toFront();
 	}
 
 	public void createMedicao() {
 		try {
-			String v = medicaoValor.getText() + ", ";
-			String c = medicaoCultura.getText() + ", ";
-			String var = medicaoVariavel.getText();
-			PreparedStatement statement = connection.prepareStatement("CALL inserir_medicao(" + v + c + var + ");");
+			String v = "\"" + medicaoValor.getText() + "\", ";
+			String c = medicaoCultura.getValue().split(" - ")[0] + ", ";
+			String var = medicaoVariavel.getValue().split(" - ")[0];
+			PreparedStatement statement = connection.prepareStatement("CALL insere_medicao(" + v + c + var + ");");
 			statement.execute();
 			populateCulturas();
 		} catch (SQLException e) {
@@ -221,5 +297,51 @@ public class MainController implements Initializable {
 		}
 
 		cancelCreateCultura();
+	}
+
+	public void openCreateLimite() {
+		try {
+			PreparedStatement statement = connection.prepareStatement("CALL select_culturas();");
+			ResultSet result = statement.executeQuery();
+
+			while (result.next())
+				limiteCultura.getItems().add(result.getInt(1) + " - " + result.getString(2));
+
+			statement = connection.prepareStatement("SELECT * FROM variavel;");
+			result = statement.executeQuery();
+
+			while (result.next())
+				limiteVariavel.getItems().add(result.getInt(1) + " - " + result.getString(2));
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		createLimite.toFront();
+	}
+
+	public void createLimite() {
+		try {
+			String c = limiteCultura.getValue().split(" - ")[0] + ", ";
+			String v = limiteVariavel.getValue().split(" - ")[0] + ", ";
+			String ls = limiteSuperior.getText() + ", ";
+			String li = limiteInferior.getText();
+			PreparedStatement statement = connection
+					.prepareStatement("CALL cria_variaveis_medidas(" + c + v + ls + li + ");");
+			statement.execute();
+			populateLimites();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		cancelCreateLimite();
+	}
+
+	public void cancelCreateLimite() {
+		limiteInferior.clear();
+		limiteSuperior.clear();
+		limiteCultura.setValue("");
+		limiteVariavel.setValue("");
+
+		createLimite.toBack();
 	}
 }
