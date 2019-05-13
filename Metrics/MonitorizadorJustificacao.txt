@@ -1,0 +1,1 @@
+A classe leitura que apresenta o code smell relativo a muitos metodos numa so classe nao corresponde a verdade pois esta classe e utilizada para receber os elementos de uma leitura do sensor que tem diversos atributos sendo assim os metodos sao apenas getters e setters para os mesmos.
