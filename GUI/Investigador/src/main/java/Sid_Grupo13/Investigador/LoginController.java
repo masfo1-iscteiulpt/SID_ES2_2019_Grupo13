@@ -28,7 +28,6 @@ public class LoginController {
 			Connection connection = DriverManager.getConnection("jdbc:mariadb://localhost:3306/teste5?user="
 					+ username.getText() + "&password=" + password.getText());
 
-			System.out.println(username.getText());
 			((Stage) ((Node) actionEvent.getSource()).getScene().getWindow()).close();
 			openMainWindow(connection);
 		} catch (SQLException e) {

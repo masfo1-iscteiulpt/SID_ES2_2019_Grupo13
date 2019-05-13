@@ -91,12 +91,12 @@
                               <Font name="System Bold" size="12.0" />
                            </font>
                         </Button>
-                        <Button mnemonicParsing="false" style="-fx-background-color: #05BC78;" text="Alterar" textFill="WHITE">
+                        <Button mnemonicParsing="false" onAction="#openAlterMedicao" style="-fx-background-color: #05BC78;" text="Alterar" textFill="WHITE">
                            <font>
                               <Font name="System Bold" size="12.0" />
                            </font>
                         </Button>
-                        <Button mnemonicParsing="false" style="-fx-background-color: #ff0505;" text="Apagar" textFill="WHITE">
+                        <Button mnemonicParsing="false" onAction="#deleteMedicao" style="-fx-background-color: #ff0505;" text="Apagar" textFill="WHITE">
                            <font>
                               <Font name="System Bold" size="12.0" />
                            </font>
@@ -110,49 +110,6 @@
                <padding>
                   <Insets left="20.0" right="20.0" />
                </padding>
-            </VBox>
-            <VBox alignment="CENTER" layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="100.0" spacing="10.0" style="-fx-background-color: ffffff;">
-               <children>
-                  <Label text="Alterar medição" />
-                  <HBox alignment="CENTER" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="300.0">
-                     <children>
-                        <Label text="Valor" />
-                        <Region prefHeight="0.0" prefWidth="0.0" HBox.hgrow="ALWAYS" />
-                        <TextField />
-                     </children>
-                  </HBox>
-                  <HBox alignment="CENTER" spacing="20.0">
-                     <children>
-                        <Button mnemonicParsing="false" style="-fx-background-color: #05BC78;" text="Alterar" textFill="WHITE" />
-                        <Button mnemonicParsing="false" style="-fx-background-color: #ff0505;" text="Cancelar" textFill="WHITE" />
-                     </children>
-                  </HBox>
-               </children>
-            </VBox>
-            <VBox fx:id="createCultura" alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="10.0" style="-fx-background-color: ffffff;">
-               <children>
-                  <Label text="Criar cultura" />
-                  <HBox alignment="CENTER" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="300.0">
-                     <children>
-                        <Label text="Nome" />
-                        <Region prefHeight="0.0" prefWidth="0.0" HBox.hgrow="ALWAYS" />
-                        <TextField fx:id="culturaName" />
-                     </children>
-                  </HBox>
-                  <HBox alignment="CENTER" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="300.0">
-                     <children>
-                        <Label text="Descrição" />
-                        <Region prefHeight="0.0" prefWidth="0.0" HBox.hgrow="ALWAYS" />
-                        <TextField fx:id="culturaDescricao" />
-                     </children>
-                  </HBox>
-                  <HBox alignment="CENTER" spacing="20.0">
-                     <children>
-                        <Button mnemonicParsing="false" onAction="#createCultura" style="-fx-background-color: #05BC78;" text="Criar" textFill="WHITE" />
-                        <Button mnemonicParsing="false" onAction="#cancelCreateCultura" style="-fx-background-color: #ff0505;" text="Cancelar" textFill="WHITE" />
-                     </children>
-                  </HBox>
-               </children>
             </VBox>
             <VBox fx:id="alterCultura" alignment="CENTER" layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="100.0" spacing="10.0" style="-fx-background-color: ffffff;">
                <children>
@@ -175,38 +132,6 @@
                      <children>
                         <Button mnemonicParsing="false" onAction="#alterCultura" style="-fx-background-color: #05BC78;" text="Alterar" textFill="WHITE" />
                         <Button mnemonicParsing="false" onAction="#cancelAlterCultura" style="-fx-background-color: #ff0505;" text="Cancelar" textFill="WHITE" />
-                     </children>
-                  </HBox>
-               </children>
-            </VBox>
-            <VBox fx:id="createMedicao" alignment="CENTER" layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="100.0" spacing="10.0" style="-fx-background-color: ffffff;">
-               <children>
-                  <Label text="Criar medição" />
-                  <HBox alignment="CENTER" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="300.0">
-                     <children>
-                        <Label text="Valor" />
-                        <Region prefHeight="0.0" prefWidth="0.0" HBox.hgrow="ALWAYS" />
-                        <TextField fx:id="medicaoValor" />
-                     </children>
-                  </HBox>
-                  <HBox alignment="CENTER" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="300.0">
-                     <children>
-                        <Label text="Cultura" />
-                        <Region prefHeight="0.0" prefWidth="0.0" HBox.hgrow="ALWAYS" />
-                        <ChoiceBox fx:id="medicaoCultura" prefWidth="150.0" />
-                     </children>
-                  </HBox>
-                  <HBox alignment="CENTER" layoutX="110.0" layoutY="236.0" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="300.0">
-                     <children>
-                        <Label text="Variável" />
-                        <Region prefHeight="0.0" prefWidth="0.0" HBox.hgrow="ALWAYS" />
-                        <ChoiceBox fx:id="medicaoVariavel" prefWidth="150.0" />
-                     </children>
-                  </HBox>
-                  <HBox alignment="CENTER" spacing="20.0">
-                     <children>
-                        <Button mnemonicParsing="false" onAction="#createMedicao" style="-fx-background-color: #05BC78;" text="Criar" textFill="WHITE" />
-                        <Button mnemonicParsing="false" style="-fx-background-color: #ff0505;" text="Cancelar" textFill="WHITE" />
                      </children>
                   </HBox>
                </children>
@@ -309,6 +234,81 @@
                      <children>
                         <Button mnemonicParsing="false" onAction="#alterLimite" style="-fx-background-color: #05BC78;" text="Alterar" textFill="WHITE" />
                         <Button mnemonicParsing="false" onAction="#cancelAlterLimite" style="-fx-background-color: #ff0505;" text="Cancelar" textFill="WHITE" />
+                     </children>
+                  </HBox>
+               </children>
+            </VBox>
+            <VBox fx:id="createCultura" alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="10.0" style="-fx-background-color: ffffff;">
+               <children>
+                  <Label text="Criar cultura" />
+                  <HBox alignment="CENTER" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="300.0">
+                     <children>
+                        <Label text="Nome" />
+                        <Region prefHeight="0.0" prefWidth="0.0" HBox.hgrow="ALWAYS" />
+                        <TextField fx:id="culturaName" />
+                     </children>
+                  </HBox>
+                  <HBox alignment="CENTER" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="300.0">
+                     <children>
+                        <Label text="Descrição" />
+                        <Region prefHeight="0.0" prefWidth="0.0" HBox.hgrow="ALWAYS" />
+                        <TextField fx:id="culturaDescricao" />
+                     </children>
+                  </HBox>
+                  <HBox alignment="CENTER" spacing="20.0">
+                     <children>
+                        <Button mnemonicParsing="false" onAction="#createCultura" style="-fx-background-color: #05BC78;" text="Criar" textFill="WHITE" />
+                        <Button mnemonicParsing="false" onAction="#cancelCreateCultura" style="-fx-background-color: #ff0505;" text="Cancelar" textFill="WHITE" />
+                     </children>
+                  </HBox>
+               </children>
+            </VBox>
+            <VBox fx:id="createMedicao" alignment="CENTER" layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="100.0" spacing="10.0" style="-fx-background-color: ffffff;">
+               <children>
+                  <Label text="Criar medição" />
+                  <HBox alignment="CENTER" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="300.0">
+                     <children>
+                        <Label text="Valor" />
+                        <Region prefHeight="0.0" prefWidth="0.0" HBox.hgrow="ALWAYS" />
+                        <TextField fx:id="medicaoValor" />
+                     </children>
+                  </HBox>
+                  <HBox alignment="CENTER" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="300.0">
+                     <children>
+                        <Label text="Cultura" />
+                        <Region prefHeight="0.0" prefWidth="0.0" HBox.hgrow="ALWAYS" />
+                        <ChoiceBox fx:id="medicaoCultura" prefWidth="150.0" />
+                     </children>
+                  </HBox>
+                  <HBox alignment="CENTER" layoutX="110.0" layoutY="236.0" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="300.0">
+                     <children>
+                        <Label text="Variável" />
+                        <Region prefHeight="0.0" prefWidth="0.0" HBox.hgrow="ALWAYS" />
+                        <ChoiceBox fx:id="medicaoVariavel" prefWidth="150.0" />
+                     </children>
+                  </HBox>
+                  <HBox alignment="CENTER" spacing="20.0">
+                     <children>
+                        <Button mnemonicParsing="false" onAction="#createMedicao" style="-fx-background-color: #05BC78;" text="Criar" textFill="WHITE" />
+                        <Button mnemonicParsing="false" onAction="#cancelCreateMedicao" style="-fx-background-color: #ff0505;" text="Cancelar" textFill="WHITE" />
+                     </children>
+                  </HBox>
+               </children>
+            </VBox>
+            <VBox fx:id="alterMedicao" alignment="CENTER" layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="100.0" spacing="10.0" style="-fx-background-color: ffffff;">
+               <children>
+                  <Label text="Alterar medição" />
+                  <HBox alignment="CENTER" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="300.0">
+                     <children>
+                        <Label text="Valor" />
+                        <Region prefHeight="0.0" prefWidth="0.0" HBox.hgrow="ALWAYS" />
+                        <TextField fx:id="alterMedicaoValor" />
+                     </children>
+                  </HBox>
+                  <HBox alignment="CENTER" spacing="20.0">
+                     <children>
+                        <Button mnemonicParsing="false" onAction="#alterMedicao" style="-fx-background-color: #05BC78;" text="Alterar" textFill="WHITE" />
+                        <Button mnemonicParsing="false" onAction="#cancelAlterMedicao" style="-fx-background-color: #ff0505;" text="Cancelar" textFill="WHITE" />
                      </children>
                   </HBox>
                </children>

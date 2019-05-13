@@ -25,6 +25,8 @@ public class MainController implements Initializable {
 	private int selectedCultura;
 	private int selectedLimitVar;
 	private int selectedLimitCul;
+	private int selectedMedicao;
+	private boolean extraLimite;
 
 	public Button showCulturas;
 	public Button showMedicoes;
@@ -42,12 +44,14 @@ public class MainController implements Initializable {
 	public VBox createMedicao;
 	public VBox createLimite;
 	public VBox alterLimite;
+	public VBox alterMedicao;
 
 	public TextField culturaName;
 	public TextField culturaDescricao;
 	public TextField alterNameCultura;
 	public TextField alterDescricaoCultura;
 	public TextField medicaoValor;
+	public TextField alterMedicaoValor;
 	public TextField limiteInferior;
 	public TextField limiteSuperior;
 	public TextField limiteInferiorAlter;
@@ -67,7 +71,7 @@ public class MainController implements Initializable {
 		setUpMedicoesTable();
 		setUpLimitesTable();
 		populateCulturas();
-//		populateVariables();
+		populateMedicoes();
 		populateLimites();
 		showCulturas();
 	}
@@ -103,13 +107,13 @@ public class MainController implements Initializable {
 		valorColumn.setMinWidth(90);
 		valorColumn.setCellValueFactory(new PropertyValueFactory<Medicao, Double>("valor"));
 
-		TableColumn<Medicao, Integer> idCulturaColumn = new TableColumn<Medicao, Integer>("Cultura");
+		TableColumn<Medicao, String> idCulturaColumn = new TableColumn<Medicao, String>("Cultura");
 		idCulturaColumn.setMinWidth(90);
-		idCulturaColumn.setCellValueFactory(new PropertyValueFactory<Medicao, Integer>("idCultura"));
+		idCulturaColumn.setCellValueFactory(new PropertyValueFactory<Medicao, String>("culturaName"));
 
-		TableColumn<Medicao, Integer> idVariavelColumn = new TableColumn<Medicao, Integer>("Variavel");
+		TableColumn<Medicao, String> idVariavelColumn = new TableColumn<Medicao, String>("Variavel");
 		idVariavelColumn.setMinWidth(90);
-		idVariavelColumn.setCellValueFactory(new PropertyValueFactory<Medicao, Integer>("idVariavel"));
+		idVariavelColumn.setCellValueFactory(new PropertyValueFactory<Medicao, String>("variavelName"));
 
 		medicoesTable.getColumns().addAll(idColumn, dataColumn, valorColumn, idCulturaColumn, idVariavelColumn);
 	}
@@ -143,6 +147,20 @@ public class MainController implements Initializable {
 			while (set.next())
 				culturasTable.getItems()
 						.add(new Cultura(set.getInt(1), set.getString(2), set.getString(3), set.getString(4)));
+			statement.execute();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void populateMedicoes() {
+		medicoesTable.getItems().clear();
+		try {
+			PreparedStatement statement = connection.prepareStatement("CALL select_medicoes();");
+			ResultSet set = statement.executeQuery();
+			while (set.next())
+				medicoesTable.getItems().add(new Medicao(set.getInt(1), set.getTimestamp(2), set.getDouble(3),
+						set.getInt(4), set.getInt(5), set.getString(6), set.getString(7)));
 			statement.execute();
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -271,6 +289,8 @@ public class MainController implements Initializable {
 	}
 
 	public void openCreateMedicao() {
+		medicaoCultura.getItems().clear();
+		medicaoVariavel.getItems().clear();
 		try {
 			PreparedStatement statement = connection.prepareStatement("CALL select_culturas();");
 			ResultSet result = statement.executeQuery();
@@ -292,20 +312,110 @@ public class MainController implements Initializable {
 
 	public void createMedicao() {
 		try {
-			String v = medicaoValor.getText() + ", ";
-			String c = medicaoCultura.getValue().split(" - ")[0] + ", ";
+			String c = medicaoCultura.getValue().split(" - ")[0];
 			String var = medicaoVariavel.getValue().split(" - ")[0];
-			PreparedStatement statement = connection.prepareStatement("CALL insere_medicao(" + v + c + var + ");");
+
+			PreparedStatement check = connection
+					.prepareStatement("SELECT * FROM `variaveis_medidas` WHERE Variavel_IDVariavel=" + var
+							+ " AND Cultura_IDCultura=" + c + ";");
+			ResultSet result = check.executeQuery();
+
+			if (!result.next()) {
+				extraLimite = true;
+				limiteCultura.getItems().add(medicaoCultura.getValue());
+				limiteCultura.setValue(medicaoCultura.getValue());
+				limiteCultura.setDisable(true);
+				limiteVariavel.getItems().add(medicaoVariavel.getValue());
+				limiteVariavel.setValue(medicaoVariavel.getValue());
+				limiteVariavel.setDisable(true);
+
+				createLimite.toFront();
+			} else {
+				addMedicao();
+				cancelCreateMedicao();
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+
+	private void addMedicao() {
+		try {
+			String v = medicaoValor.getText() + ", ";
+			String c = medicaoCultura.getValue().split(" - ")[0];
+			String var = medicaoVariavel.getValue().split(" - ")[0];
+
+			PreparedStatement statement = connection
+					.prepareStatement("INSERT INTO `medicao` VALUES (null, now(), " + v + c + ", " + var + ");");
+
 			statement.execute();
-			populateCulturas();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 
-		cancelCreateCultura();
+		populateMedicoes();
+	}
+
+	public void cancelCreateMedicao() {
+		medicaoValor.clear();
+		medicaoCultura.setValue("");
+		medicaoVariavel.setValue("");
+
+		createMedicao.toBack();
+	}
+
+	public void openAlterMedicao() {
+		ObservableList<Medicao> selected = medicoesTable.getSelectionModel().getSelectedItems();
+
+		if (selected.size() > 0) {
+			Medicao medicao = selected.get(0);
+			selectedMedicao = medicao.getId();
+
+			alterMedicaoValor.setText(medicao.getValor() + "");
+
+			alterMedicao.toFront();
+		}
+	}
+
+	public void alterMedicao() {
+		try {
+			String v = alterMedicaoValor.getText();
+			PreparedStatement statement = connection.prepareStatement(
+					"UPDATE `medicao` SET `ValorMedicao`=" + v + " WHERE `NumeroMedicao`=" + selectedMedicao + ";");
+			statement.execute();
+			populateMedicoes();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		cancelAlterMedicao();
+	}
+
+	public void cancelAlterMedicao() {
+		alterMedicaoValor.clear();
+
+		alterMedicao.toBack();
+	}
+
+	public void deleteMedicao() {
+		ObservableList<Medicao> all = medicoesTable.getItems();
+		ObservableList<Medicao> selected = medicoesTable.getSelectionModel().getSelectedItems();
+
+		for (Medicao medicao : selected) {
+			try {
+				PreparedStatement statement = connection
+						.prepareStatement("DELETE FROM `medicao` WHERE `NumeroMedicao`=" + medicao.getId() + ";");
+				statement.execute();
+				all.remove(medicao);
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 
 	public void openCreateLimite() {
+		limiteCultura.setDisable(false);
+		limiteVariavel.setDisable(false);
 		limiteCultura.getItems().clear();
 		limiteVariavel.getItems().clear();
 		try {
@@ -337,6 +447,12 @@ public class MainController implements Initializable {
 					.prepareStatement("CALL cria_variaveis_medidas(" + c + v + ls + li + ");");
 			statement.execute();
 			populateLimites();
+
+			if (extraLimite) {
+				addMedicao();
+				cancelCreateMedicao();
+				extraLimite = false;
+			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

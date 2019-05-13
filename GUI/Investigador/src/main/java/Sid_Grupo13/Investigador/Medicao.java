@@ -9,13 +9,18 @@ public class Medicao {
 	private double valor;
 	private int idCultura;
 	private int idVariavel;
+	private String culturaName;
+	private String variavelName;
 
-	public Medicao(int id, Timestamp datahora, double valor, int idCultura, int idVariavel) {
+	public Medicao(int id, Timestamp datahora, double valor, int idCultura, int idVariavel, String culturaName,
+			String variavelName) {
 		this.id = id;
 		this.datahora = datahora;
 		this.valor = valor;
 		this.idCultura = idCultura;
 		this.idVariavel = idVariavel;
+		this.culturaName = culturaName;
+		this.variavelName = variavelName;
 	}
 
 	public int getId() {
@@ -36,5 +41,13 @@ public class Medicao {
 
 	public int getIdVariavel() {
 		return idVariavel;
+	}
+
+	public String getCulturaName() {
+		return culturaName;
+	}
+
+	public String getVariavelName() {
+		return variavelName;
 	}
 }
