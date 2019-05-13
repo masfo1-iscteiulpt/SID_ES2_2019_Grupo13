@@ -85,7 +85,7 @@ public class MainController implements Initializable {
 		TableColumn<Cultura, String> nameColumn = new TableColumn<Cultura, String>("Nome");
 		nameColumn.setMinWidth(90);
 		nameColumn.setCellValueFactory(new PropertyValueFactory<Cultura, String>("nome"));
-
+		
 		TableColumn<Cultura, String> descricaoColumn = new TableColumn<Cultura, String>("Descrição");
 		descricaoColumn.setMinWidth(90);
 		descricaoColumn.setCellValueFactory(new PropertyValueFactory<Cultura, String>("descricao"));
