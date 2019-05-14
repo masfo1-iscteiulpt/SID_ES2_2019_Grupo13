@@ -21,11 +21,12 @@ public class MongoToMySql {
 
 	public static void main(String[] args) throws InterruptedException, ParseException {
 		// criar user para nao utilizar o root
-		
+		while(true) {
 		MongoToMySql m = new MongoToMySql();
 		int setsize = 10;
 		FindIterable<Document> found = m.mongoConnector.queryFromLastExported();
 		ArrayList<Document> evenlist = new ArrayList<Document>();
+		
 		for (Document d : found) {
 			if (evenlist.size() >= setsize) {
 				m.store(m.even(evenlist, m.percentagediff));
@@ -33,7 +34,9 @@ public class MongoToMySql {
 			}
 			evenlist.add(d);
 		}
-		System.out.println("sucess");
+		evenlist.clear();
+		Thread.sleep(2000);
+		}
 //		Timestamp timestamp = getTimestamp(d.getString("dat"), d.getString("tim"));
 //		int id = d.getInteger("readid");
 //		double light = (d.getInteger("cell"));
@@ -82,7 +85,7 @@ public class MongoToMySql {
 	private void store(Leitura even) {
 		if (even != null) {
 			System.out.println(even.toMongoStringCurrentID());
-			mongoConnector.incrementLastExported(even.getId());
+			
 
 			Timestamp timestamp = getTimestamp(even.getDat(), even.getTim());
 			int id = even.getId();
@@ -91,6 +94,7 @@ public class MongoToMySql {
 	
 			mysqlConnector.insert("medicoes_temperatura", id, timestamp, temperature);
 			mysqlConnector.insert("medicoes_luminosidade", id, timestamp, light);
+			mongoConnector.incrementLastExported(even.getId());
 			// acabar esta funcao e o increment index
 		} else {
 			System.out.println("todos os elementos invalidos(demasiada variacao)");
