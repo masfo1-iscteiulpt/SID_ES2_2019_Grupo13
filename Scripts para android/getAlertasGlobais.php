@@ -3,24 +3,28 @@
 	$url = "127.0.0.1";
 	$database = "sid2019";
 	$conn = mysqli_connect($url, $_POST['username'], $_POST['password'], $database);
-
-	if (!$conn) {
-		die("ConnectionFailled: " . $conn->connect_error);
-	}
-
 	$sql = "CALL getAlertasGlobais(".$_POST['date'].");";
 	$result = mysqli_query($conn, $sql);
 	$rows = array();
 
-	if ($result) {
-		if (mysqli_num_rows($result) > 0) {
-			while ($r = mysqli_fetch_assoc($result)) {
-				array_push($rows, $r);
+	$response["alertas"] = array();
+	if ($result){
+		if (mysqli_num_rows($result)>0){
+			while($r=mysqli_fetch_assoc($result)){
+				$ad = array();
+				$ad["DataHora"] = $r['datahora'];
+				$ad["NomeVariavel"] = $r['tipo'];
+				$ad["LimiteInferior"] = $r['limiteInferior'];
+				$ad["LimiteSuperior"] = $r['limiteSuperior'];
+				$ad["ValorMedicao"] = $r['valor'];
+				$ad["Descricao"] = $r['Descricao'];
+				array_push($response["alertas"], $ad);
 			}
-		}
+		}	
 	}
-
-	mysqli_close($conn);
-	return json_encode($rows);
-
+	
+	
+	$json = json_encode($response["alertas"]);
+	echo $json;
+	mysqli_close ($conn);
 ?>

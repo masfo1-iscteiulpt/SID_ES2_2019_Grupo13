@@ -2,7 +2,7 @@
 	$url="127.0.0.1";
 	$database="sid2019";
     $conn = mysqli_connect($url,$_POST['username'],$_POST['password'],$database);
-	$sql = "select dataHoraMedicao,valorMedicaoTemperatura from medicoes_Temperatura where dataHoraMedicao >= now() - interval 40 minute";
+	$sql = "select dataHoraMedicao,valorMedicaoTemperatura from medicoes_Temperatura where dataHoraMedicao >= now() - interval 65 minute";
 	$result = mysqli_query($conn, $sql);
 	$response["medicoes"] = array();
 	if ($result){
