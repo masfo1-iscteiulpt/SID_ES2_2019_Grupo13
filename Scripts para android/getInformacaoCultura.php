@@ -1,19 +1,17 @@
 <?php
 
-	$username = $_GET['username'];
-	$password = $_GET['password'];
-	$id= $_GET['idCultura'];
-	$url = 'localhost';
-	$database = 'sid2019'
-	$conn = mysqli_connect($url, $username, $password,$database);
+	$url = "127.0.0.1";
+	$database = "sid2019";
+	$conn = mysqli_connect($url, $_POST['username'], $_POST['password'], $database);
 
 	if (!$conn) {
 		die("ConnectionFailled: " . $conn->connect_error);
 	}
 	
-	$sql = "call getInformacaoCultura(".$id.");";
+	$sql = "call getInformacaoCultura(".$_POST['idCultura'].");";
 	$result = mysqli_query($conn, $sql);
 	$rows = array();
+	
 	if ($result) {
 		if (mysqli_num_rows($result)>0){
 			while($r=mysqli_fetch_assoc($result)){
