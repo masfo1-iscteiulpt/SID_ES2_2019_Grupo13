@@ -1,15 +1,8 @@
-<?php
-
-	$username = $_GET['username'];
-	$password = $_GET['password'];
-	$url = 'localhost';
-	$conn = mysqli_connect($url, $username, $password);
-
-	if (!$conn) {
-		die("ConnectionFailled: " . $conn->connect_error);
-	}else{
-		mysqli_close($conn);
-		return json_encode(array());
-	}
-
-?>
+	<?php
+	$url="127.0.0.1";
+	$database="sid2019";
+    $conn = mysqli_connect($url,$_POST['username'],$_POST['password'],$database);
+	$response["valid"] = array();
+	$json = json_encode($response["valid"]);
+	echo $json;
+	mysqli_close ($conn);

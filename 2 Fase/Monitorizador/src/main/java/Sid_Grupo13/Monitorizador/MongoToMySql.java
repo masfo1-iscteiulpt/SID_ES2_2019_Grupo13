@@ -15,12 +15,13 @@ import Sid_Grupo13.Monitorizador.models.Leitura;
 
 public class MongoToMySql {
 
-	MySqlConnector mysqlConnector = new MySqlConnector("jdbc:mariadb://localhost:3306/dbsid", "root", "");
+	MySqlConnector mysqlConnector = new MySqlConnector("jdbc:mariadb://localhost:3306/sid2019", "root", "123");
 	MongoConnector mongoConnector = new MongoConnector("Leituras");
 	int percentagediff = 10;
 
 	public static void main(String[] args) throws InterruptedException, ParseException {
 		// criar user para nao utilizar o root
+		
 		MongoToMySql m = new MongoToMySql();
 		int setsize = 10;
 		FindIterable<Document> found = m.mongoConnector.queryFromLastExported();
@@ -32,7 +33,7 @@ public class MongoToMySql {
 			}
 			evenlist.add(d);
 		}
-
+		System.out.println("sucess");
 //		Timestamp timestamp = getTimestamp(d.getString("dat"), d.getString("tim"));
 //		int id = d.getInteger("readid");
 //		double light = (d.getInteger("cell"));
@@ -43,10 +44,12 @@ public class MongoToMySql {
 	}
 
 	private Leitura even(ArrayList<Document> parsedlist, int percentagediff) {
+		
 		Double tmpsum = 0.0;
 		Double count = 0.0;
 		Double cellsum = 0.0;
 		boolean repeat = true;
+		ArrayList<Document> removelist=new ArrayList<Document>();
 		while (repeat) {
 			repeat = false;
 			tmpsum = 0.0;
@@ -63,9 +66,10 @@ public class MongoToMySql {
 				if ((((Math.abs((l.getDouble("tmp") - tmpsum) * 100)) / (tmpsum)) > percentagediff)
 						|| (((Math.abs((l.getInteger("cell") - cellsum) * 100)) / (cellsum)) > percentagediff)) {
 					repeat = true;
-					parsedlist.remove(l);
+					removelist.add(l);
 				}
 			}
+			for(Document l:removelist)parsedlist.remove(l);
 		}
 		if (!parsedlist.isEmpty()) {
 			Document last = parsedlist.get(parsedlist.size()-1);
@@ -85,8 +89,8 @@ public class MongoToMySql {
 			double light = (even.getCell());
 			double temperature = (even.getTmp());
 	
-			mysqlConnector.insert("medicoestemperatura", id, timestamp, temperature);
-			mysqlConnector.insert("medicoesluminosidade", id, timestamp, light);
+			mysqlConnector.insert("medicoes_temperatura", id, timestamp, temperature);
+			mysqlConnector.insert("medicoes_luminosidade", id, timestamp, light);
 			// acabar esta funcao e o increment index
 		} else {
 			System.out.println("todos os elementos invalidos(demasiada variacao)");

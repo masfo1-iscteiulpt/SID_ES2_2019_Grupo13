@@ -26,6 +26,7 @@ public class MongoMqttCallback implements MqttCallback{
 			Leitura l=validate(message.toString().replace("\"sens", ",\"sens"));
 			mconn.insertJson(l.toMongoString(++i));
 			mconn.incrementIndex();
+			System.out.println("mensagem guardada: "+message.toString());
 		} catch (Exception e) {
 			System.out.println("mensagem descartada: "+message.toString());
 		} 

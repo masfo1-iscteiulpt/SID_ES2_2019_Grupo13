@@ -4,7 +4,9 @@
 	$password = $_GET['password'];
 	$date= $_GET['date'];
 	$url = 'localhost';
-	$conn = mysqli_connect($url, $username, $password);
+	$database = 'sid2019'
+	$conn = mysqli_connect($url, $username, $password,$database);
+
 
 	if (!$conn) {
 		die("ConnectionFailled: " . $conn->connect_error);

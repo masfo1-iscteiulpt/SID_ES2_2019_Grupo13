@@ -32,6 +32,7 @@ public class LoginController {
 			openMainWindow(connection);
 		} catch (SQLException e) {
 			error.setText("Login errado");
+			e.printStackTrace();
 		}
 	}
 
