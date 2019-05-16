@@ -21,6 +21,8 @@ SET time_zone = "+00:00";
 --
 -- Database: `sid2019`
 --
+create database sid2019;
+use sid2019;
 
 DELIMITER $$
 --

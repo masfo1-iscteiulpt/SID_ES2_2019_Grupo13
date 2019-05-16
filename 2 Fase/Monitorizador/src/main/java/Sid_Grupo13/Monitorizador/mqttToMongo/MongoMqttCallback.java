@@ -34,7 +34,6 @@ public class MongoMqttCallback implements MqttCallback{
 
 	private Leitura validate(String string) throws Exception {
 		Leitura l=new ObjectMapper().readValue(string, Leitura.class);
-		if(!l.validate())throw new Exception();
 		return l;
 	}
 	

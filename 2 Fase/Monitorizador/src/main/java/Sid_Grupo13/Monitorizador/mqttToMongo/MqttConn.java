@@ -21,7 +21,7 @@ public class MqttConn {
 	public static void main(String[] args) {
 		MongoConnector mconn = new MongoConnector("Leituras");
 		MqttCallback callback = new MongoMqttCallback(mconn);
-		Poller p=new Poller("/sid_lab_2019", "tcp://iot.eclipse.org:1883", "MqttReciever", callback);
+		Poller p=new Poller("teste", "tcp://broker.mqtt-dashboard.com", "MqttReciever", callback);
 		p.connect();
 		p.subscribe();
 		System.out.println("Pressione uma tecla para sair...");
