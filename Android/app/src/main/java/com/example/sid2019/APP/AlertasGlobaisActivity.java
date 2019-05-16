@@ -2,8 +2,8 @@ package com.example.sid2019.APP;
 
 import android.content.Intent;
 import android.database.Cursor;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.TableLayout;
 import android.widget.TableRow;
@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.example.sid2019.APP.Connection.ConnectionHandler;
 import com.example.sid2019.APP.Database.DatabaseHandler;
 import com.example.sid2019.APP.Database.DatabaseReader;
+import com.example.sid2019.APP.Helper.NotificationHelper;
 import com.example.sid2019.APP.Helper.UserLogin;
 import com.example.sid2019.R;
 
@@ -29,6 +30,7 @@ public class AlertasGlobaisActivity extends AppCompatActivity {
     private static final String username= UserLogin.getInstance().getUsername();
     private static final String password = UserLogin.getInstance().getPassword();
     DatabaseHandler db = new DatabaseHandler(this);
+    NotificationHelper nm = new NotificationHelper(this);
     String getAlertasGlobais = "http://" + IP + ":" + PORT + "/scripts/getAlertasGlobais.php";
     int year;
     int month;
@@ -105,6 +107,7 @@ public class AlertasGlobaisActivity extends AppCompatActivity {
                     double valorMedicao = c.getDouble("ValorMedicao");
                     String descricao = c.getString("Descricao");
                     db.insert_alertaGlobal(dataHoraMedicao,nomeVariavel,limiteInferior,limiteSuperior,valorMedicao,descricao);
+                    nm.createNotification();
                 }
             }
         }catch (JSONException e){

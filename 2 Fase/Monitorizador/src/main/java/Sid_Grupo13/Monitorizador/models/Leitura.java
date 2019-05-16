@@ -7,12 +7,12 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class Leitura {
 	
 	@JsonProperty(required=true)
-	private Double tmp=0.0;
-	private Double hum=0.0;
-	private String tim="";
-	private String dat="";
-	private Integer cell=0;
-	private String sens="";
+	private Double tmp;
+	private Double hum;
+	private String tim;
+	private String dat;
+	private Integer cell;
+	private String sens;
 	private int id;
 	
 	public int getId() {
