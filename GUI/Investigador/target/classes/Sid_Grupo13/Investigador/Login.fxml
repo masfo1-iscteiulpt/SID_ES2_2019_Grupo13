@@ -25,7 +25,21 @@
             <PasswordField fx:id="password" />
          </children>
       </HBox>
-      <Button mnemonicParsing="false" onAction="#login" style="-fx-background-color: #05BC78;" text="Iniciar sessão" textFill="WHITE">
+      <HBox alignment="CENTER" layoutX="160.0" layoutY="149.0" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="300.0">
+         <children>
+            <Label text="IP" />
+            <Region maxHeight="-Infinity" minHeight="-Infinity" prefHeight="0.0" prefWidth="0.0" HBox.hgrow="ALWAYS" />
+            <TextField fx:id="address" />
+         </children>
+      </HBox>
+      <HBox alignment="CENTER" layoutX="160.0" layoutY="132.0" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="300.0">
+         <children>
+            <Label text="Porto" />
+            <Region maxHeight="-Infinity" minHeight="-Infinity" prefHeight="0.0" prefWidth="0.0" HBox.hgrow="ALWAYS" />
+            <TextField fx:id="port" />
+         </children>
+      </HBox>
+      <Button defaultButton="true" mnemonicParsing="false" onAction="#login" style="-fx-background-color: #05BC78;" text="Iniciar sessão" textFill="WHITE">
          <font>
             <Font name="System Bold" size="12.0" />
          </font>

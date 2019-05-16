@@ -56,6 +56,8 @@ public class MainController implements Initializable {
 	public TextField limiteSuperior;
 	public TextField limiteInferiorAlter;
 	public TextField limiteSuperiorAlter;
+	public TextField limiteMargem;
+	public TextField limiteMargemAlter;
 
 	public ChoiceBox<String> medicaoCultura;
 	public ChoiceBox<String> medicaoVariavel;
@@ -67,6 +69,27 @@ public class MainController implements Initializable {
 	}
 
 	public void initialize(URL location, ResourceBundle resources) {
+		limiteCultura.valueProperty().addListener((v, oldValue, newValue) -> {
+			limiteVariavel.getItems().clear();
+			limiteVariavel.setDisable(true);
+			if (newValue != null)
+				if (!newValue.isEmpty())
+					try {
+						String c = newValue.split(" - ")[0];
+						PreparedStatement statement = connection
+								.prepareStatement("CALL select_v_disponiveis(" + c + ")");
+						ResultSet result = statement.executeQuery();
+
+						if (result.next()) {
+							do {
+								limiteVariavel.getItems().add(result.getInt(1) + " - " + result.getString(2));
+							} while (result.next());
+							limiteVariavel.setDisable(false);
+						}
+					} catch (SQLException e) {
+						e.printStackTrace();
+					}
+		});
 		setUpCulturasTable();
 		setUpMedicoesTable();
 		setUpLimitesTable();
@@ -85,7 +108,7 @@ public class MainController implements Initializable {
 		TableColumn<Cultura, String> nameColumn = new TableColumn<Cultura, String>("Nome");
 		nameColumn.setMinWidth(90);
 		nameColumn.setCellValueFactory(new PropertyValueFactory<Cultura, String>("nome"));
-		
+
 		TableColumn<Cultura, String> descricaoColumn = new TableColumn<Cultura, String>("Descrição");
 		descricaoColumn.setMinWidth(90);
 		descricaoColumn.setCellValueFactory(new PropertyValueFactory<Cultura, String>("descricao"));
@@ -136,7 +159,11 @@ public class MainController implements Initializable {
 		culColumn.setMinWidth(90);
 		culColumn.setCellValueFactory(new PropertyValueFactory<Limite, String>("culturaName"));
 
-		limitesTable.getColumns().addAll(infColumn, supColumn, varColumn, culColumn);
+		TableColumn<Limite, Integer> margemColumn = new TableColumn<Limite, Integer>("Margem");
+		margemColumn.setMinWidth(90);
+		margemColumn.setCellValueFactory(new PropertyValueFactory<Limite, Integer>("margem"));
+
+		limitesTable.getColumns().addAll(infColumn, supColumn, varColumn, culColumn, margemColumn);
 	}
 
 	public void populateCulturas() {
@@ -174,7 +201,7 @@ public class MainController implements Initializable {
 			ResultSet set = statement.executeQuery();
 			while (set.next())
 				limitesTable.getItems().add(new Limite(set.getDouble(1), set.getDouble(2), set.getInt(3), set.getInt(4),
-						set.getString(5), set.getString(6)));
+						set.getInt(5), set.getString(6), set.getString(7)));
 			statement.execute();
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -341,14 +368,17 @@ public class MainController implements Initializable {
 
 	private void addMedicao() {
 		try {
-			String v = medicaoValor.getText() + ", ";
-			String c = medicaoCultura.getValue().split(" - ")[0];
-			String var = medicaoVariavel.getValue().split(" - ")[0];
+			if (!medicaoValor.getText().isEmpty() && !medicaoCultura.getValue().isEmpty()
+					&& !medicaoVariavel.getValue().isEmpty()) {
+				String v = medicaoValor.getText() + ", ";
+				String c = medicaoCultura.getValue().split(" - ")[0];
+				String var = medicaoVariavel.getValue().split(" - ")[0];
 
-			PreparedStatement statement = connection
-					.prepareStatement("INSERT INTO `medicao` VALUES (null, now(), " + v + c + ", " + var + ");");
+				PreparedStatement statement = connection
+						.prepareStatement("INSERT INTO `medicao` VALUES (null, now(), " + v + c + ", " + var + ");");
 
-			statement.execute();
+				statement.execute();
+			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -379,11 +409,13 @@ public class MainController implements Initializable {
 
 	public void alterMedicao() {
 		try {
-			String v = alterMedicaoValor.getText();
-			PreparedStatement statement = connection.prepareStatement(
-					"UPDATE `medicao` SET `ValorMedicao`=" + v + " WHERE `NumeroMedicao`=" + selectedMedicao + ";");
-			statement.execute();
-			populateMedicoes();
+			if (!alterMedicaoValor.getText().isEmpty()) {
+				String v = alterMedicaoValor.getText();
+				PreparedStatement statement = connection.prepareStatement(
+						"UPDATE `medicao` SET `ValorMedicao`=" + v + " WHERE `NumeroMedicao`=" + selectedMedicao + ";");
+				statement.execute();
+				populateMedicoes();
+			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -415,7 +447,7 @@ public class MainController implements Initializable {
 
 	public void openCreateLimite() {
 		limiteCultura.setDisable(false);
-		limiteVariavel.setDisable(false);
+		limiteVariavel.setDisable(true);
 		limiteCultura.getItems().clear();
 		limiteVariavel.getItems().clear();
 		try {
@@ -424,12 +456,6 @@ public class MainController implements Initializable {
 
 			while (result.next())
 				limiteCultura.getItems().add(result.getInt(1) + " - " + result.getString(2));
-
-			statement = connection.prepareStatement("SELECT * FROM variavel;");
-			result = statement.executeQuery();
-
-			while (result.next())
-				limiteVariavel.getItems().add(result.getInt(1) + " - " + result.getString(2));
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -439,19 +465,25 @@ public class MainController implements Initializable {
 
 	public void createLimite() {
 		try {
-			String c = limiteCultura.getValue().split(" - ")[0] + ", ";
-			String v = limiteVariavel.getValue().split(" - ")[0] + ", ";
-			String ls = limiteSuperior.getText() + ", ";
-			String li = limiteInferior.getText();
-			PreparedStatement statement = connection
-					.prepareStatement("CALL cria_variaveis_medidas(" + c + v + ls + li + ");");
-			statement.execute();
-			populateLimites();
+			if (!limiteCultura.getValue().isEmpty() && !limiteVariavel.getValue().isEmpty()
+					&& !limiteSuperior.getText().isEmpty() && !limiteInferior.getText().isEmpty()
+					&& !limiteMargem.getText().isEmpty()) {
+				String c = limiteCultura.getValue().split(" - ")[0] + ", ";
+				String v = limiteVariavel.getValue().split(" - ")[0] + ", ";
+				String ls = limiteSuperior.getText() + ", ";
+				String li = limiteInferior.getText() + ", ";
+				String m = limiteMargem.getText();
+				PreparedStatement statement = connection
+						.prepareStatement("CALL cria_variaveis_medidas(" + c + v + ls + li + m + ");");
+				statement.execute();
+				System.out.println(statement.toString());
+				populateLimites();
 
-			if (extraLimite) {
-				addMedicao();
-				cancelCreateMedicao();
-				extraLimite = false;
+				if (extraLimite) {
+					addMedicao();
+					cancelCreateMedicao();
+					extraLimite = false;
+				}
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -465,6 +497,7 @@ public class MainController implements Initializable {
 		limiteSuperior.clear();
 		limiteCultura.setValue("");
 		limiteVariavel.setValue("");
+		limiteMargem.clear();
 
 		createLimite.toBack();
 	}
@@ -479,6 +512,7 @@ public class MainController implements Initializable {
 
 			limiteInferiorAlter.setText(limite.getLimiteInferior() + "");
 			limiteSuperiorAlter.setText(limite.getLimiteSuperior() + "");
+			limiteMargemAlter.setText(limite.getMargem() + "");
 
 			alterLimite.toFront();
 		}
@@ -486,14 +520,18 @@ public class MainController implements Initializable {
 
 	public void alterLimite() {
 		try {
-			String li = limiteInferiorAlter.getText();
-			String ls = limiteSuperiorAlter.getText();
-			PreparedStatement statement = connection.prepareStatement("UPDATE `variaveis_medidas` SET `LimiteInferior`="
-					+ li + ", `LimiteSuperior`=" + ls + " WHERE Variavel_IDVariavel=" + selectedLimitVar
-					+ " AND Cultura_IDCultura=" + selectedLimitCul + ";");
-			statement.execute();
-			populateLimites();
-			System.out.println(selectedLimitVar + " " + selectedLimitCul);
+			if (!limiteInferiorAlter.getText().isEmpty() && !limiteSuperiorAlter.getText().isEmpty()
+					&& !limiteMargemAlter.getText().isEmpty()) {
+				String li = limiteInferiorAlter.getText();
+				String ls = limiteSuperiorAlter.getText();
+				String m = limiteMargemAlter.getText();
+				PreparedStatement statement = connection
+						.prepareStatement("UPDATE `variaveis_medidas` SET `LimiteInferior`=" + li
+								+ ", `LimiteSuperior`=" + ls + ", `Margem`=" + m + " WHERE Variavel_IDVariavel="
+								+ selectedLimitVar + " AND Cultura_IDCultura=" + selectedLimitCul + ";");
+				statement.execute();
+				populateLimites();
+			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -504,6 +542,7 @@ public class MainController implements Initializable {
 	public void cancelAlterLimite() {
 		limiteInferiorAlter.clear();
 		limiteSuperiorAlter.clear();
+		limiteMargemAlter.clear();
 
 		alterLimite.toBack();
 	}
