@@ -349,6 +349,7 @@ public class MainController implements Initializable {
 
 			if (!result.next()) {
 				extraLimite = true;
+//				openCreateLimite();
 				limiteCultura.getItems().add(medicaoCultura.getValue());
 				limiteCultura.setValue(medicaoCultura.getValue());
 				limiteCultura.setDisable(true);

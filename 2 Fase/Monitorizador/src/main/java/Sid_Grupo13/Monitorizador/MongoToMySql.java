@@ -19,43 +19,36 @@ public class MongoToMySql {
 	MySqlConnector mysqlConnector = new MySqlConnector("jdbc:mariadb://localhost:3306/sid2019", "root", "123");
 	MongoConnector mongoConnector = new MongoConnector("Leituras");
 	static int setsize = 3;
+	static int sleeptime = 2000;
 
 	public static void main(String[] args) throws InterruptedException, ParseException {
 		// criar user para nao utilizar o root
 		MongoToMySql m = new MongoToMySql();
 		while (true) {
-			
 
 			FindIterable<Document> found = m.mongoConnector.queryFromLastExported();
 			ArrayList<Document> evenlist = new ArrayList<Document>();
 
 			for (Document d : found) {
 				if (evenlist.size() > setsize) {
-					m.store(m.even(evenlist));
+					m.store(m.median(evenlist));
 					evenlist.clear();
 				}
 				evenlist.add(d);
 			}
 			evenlist.clear();
-			
-			Thread.sleep(2000);
+
+			Thread.sleep(sleeptime);
 		}
-//		Timestamp timestamp = getTimestamp(d.getString("dat"), d.getString("tim"));
-//		int id = d.getInteger("readid");
-//		double light = (d.getInteger("cell"));
-//		double temperature = (d.getDouble("tmp"));
-//
-//		mysqlConnector.insert("medicoestemperatura", id, timestamp, temperature);
-//		mysqlConnector.insert("medicoesluminosidade", id, timestamp, light);
 	}
 
-	private Leitura even(ArrayList<Document> parsedlist) {
-		Double[] temps=new Double[parsedlist.size()];
-		int[] cells=new int[parsedlist.size()];
-		int i=0;
-		for(Document l:parsedlist) {
-			temps[i]=((l.get("tmp")!=null)?l.getDouble("tmp"):0.0);
-			cells[i]=l.getInteger("cell",0);
+	private Leitura median(ArrayList<Document> parsedlist) {
+		Double[] temps = new Double[parsedlist.size()];
+		int[] cells = new int[parsedlist.size()];
+		int i = 0;
+		for (Document l : parsedlist) {
+			temps[i] = ((l.get("tmp") != null) ? l.getDouble("tmp") : 0.0);
+			cells[i] = l.getInteger("cell", 0);
 			i++;
 		}
 		Arrays.sort(temps);
@@ -63,17 +56,17 @@ public class MongoToMySql {
 		double mediantmp;
 		int mediancell;
 		if (parsedlist.size() % 2 == 0) {
-		    mediantmp = ((double)temps[temps.length/2] + (double)temps[temps.length/2 - 1])/2;
-			mediancell= (cells[cells.length/2] + cells[cells.length/2 - 1])/2;
-		}else {
-		    mediantmp = (double) temps[temps.length/2];
-			mediancell= cells[cells.length/2];
+			mediantmp = ((double) temps[temps.length / 2] + (double) temps[temps.length / 2 - 1]) / 2;
+			mediancell = (cells[cells.length / 2] + cells[cells.length / 2 - 1]) / 2;
+		} else {
+			mediantmp = (double) temps[temps.length / 2];
+			mediancell = cells[cells.length / 2];
 		}
-		
-		Document last = parsedlist.get(parsedlist.size()/2);
-		
-			return new Leitura(mediantmp, last.getString("tim"), last.getString("dat"), mediancell,
-					last.getInteger("readid"));
+
+		Document last = parsedlist.get(parsedlist.size() / 2);
+
+		return new Leitura(mediantmp, last.getString("tim"), last.getString("dat"), mediancell,
+				last.getInteger("readid"));
 	}
 
 	private void store(Leitura even) {
@@ -87,7 +80,6 @@ public class MongoToMySql {
 			mysqlConnector.insert("medicoes_temperatura", id, timestamp, temperature);
 			mysqlConnector.insert("medicoes_luminosidade", id, timestamp, light);
 			mongoConnector.incrementLastExported(even.getId());
-			// acabar esta funcao e o increment index
 		} else {
 			System.out.println("nenhum elemento guardado");
 		}
