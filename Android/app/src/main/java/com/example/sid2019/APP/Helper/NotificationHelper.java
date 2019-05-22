@@ -5,6 +5,7 @@ import android.app.NotificationManager;
 import android.content.Context;
 import android.os.Build;
 import android.support.v4.app.NotificationCompat;
+import android.app.Notification;
 
 import com.example.sid2019.APP.MainActivity;
 import com.example.sid2019.R;
@@ -14,16 +15,25 @@ import static android.support.v4.content.ContextCompat.getSystemService;
 
 public class NotificationHelper {
     private static final String CHANNEL_ID = "default";
-    Context context;
+    private Context context;
+    private NotificationManager notificationManager;
+
+
     public NotificationHelper(Context mainActivity) {
         this.context=mainActivity;
+        createNotificationChannel();
+
     }
 
     public void createNotification(){
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(context,"default");
+        int notificationId = 1001;
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, CHANNEL_ID);
         builder.setSmallIcon(R.mipmap.ic_launcher);
         builder.setContentTitle("notification");
         builder.setContentText("conteudo");
+        Notification notification = builder.build();
+        notificationManager.notify(notificationId, notification);
+
     }
 
     private void createNotificationChannel() {
@@ -37,8 +47,11 @@ public class NotificationHelper {
             channel.setDescription(description);
             // Register the channel with the system; you can't change the importance
             // or other notification behaviors after this
-            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+            notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
             notificationManager.createNotificationChannel(channel);
+        }
+        else{
+            throw new UnsupportedOperationException();
         }
     }
 }

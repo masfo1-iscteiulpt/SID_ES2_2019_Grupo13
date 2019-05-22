@@ -7,29 +7,32 @@ import android.os.StrictMode;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
 import com.example.sid2019.APP.Connection.ConnectionHandler;
+import com.example.sid2019.APP.Helper.NotificationHelper;
 import com.example.sid2019.APP.Helper.UserLogin;
 import com.example.sid2019.R;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 
 import java.util.HashMap;
 
 
 public class LoginActivity extends AppCompatActivity {
 
+    NotificationHelper notificationHelper;
     private EditText ip, port, username, password;
     private Button login;
     SharedPreferences myPrefs;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        notificationHelper = new NotificationHelper(this);
+
         setContentView(R.layout.login_activity);
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
@@ -45,6 +48,7 @@ public class LoginActivity extends AppCompatActivity {
         port.setText(myPrefs.getString("port",""));
         username.setText(myPrefs.getString("username",""));
         password.setText(myPrefs.getString("password",""));
+        notificationHelper.createNotification();
 
     }
 
