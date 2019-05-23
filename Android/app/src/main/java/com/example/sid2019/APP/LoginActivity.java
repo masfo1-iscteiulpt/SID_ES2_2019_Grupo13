@@ -23,15 +23,12 @@ import java.util.HashMap;
 
 public class LoginActivity extends AppCompatActivity {
 
-    NotificationHelper notificationHelper;
     private EditText ip, port, username, password;
     private Button login;
     SharedPreferences myPrefs;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        notificationHelper = new NotificationHelper(this);
 
         setContentView(R.layout.login_activity);
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
@@ -48,7 +45,6 @@ public class LoginActivity extends AppCompatActivity {
         port.setText(myPrefs.getString("port",""));
         username.setText(myPrefs.getString("username",""));
         password.setText(myPrefs.getString("password",""));
-        notificationHelper.createNotification();
 
     }
 

@@ -35,7 +35,6 @@ public class MainActivity extends AppCompatActivity {
     private static final String password = UserLogin.getInstance().getPassword();
     Spinner spinner;
     DatabaseHandler db = new DatabaseHandler(this);
-    NotificationHelper nm = new NotificationHelper(this);
     String getCulturasOfInvestigador = "http://" + IP + ":" + PORT + "/scripts/getCulturasOfUser.php";
     String getInformacaoCultura = "http://" + IP + ":" + PORT + "/scripts/getInformacaoCultura.php";
 

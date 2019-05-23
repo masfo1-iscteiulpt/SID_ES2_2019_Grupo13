@@ -18,7 +18,6 @@ public class MongoMqttCallback implements MqttCallback{
 		this.mconn=mconn;
 	}
 
-	@Override
 	public void messageArrived(String topic, MqttMessage message) {
 		int i = mconn.getIndex();
 		mconn.getCollection("sensor");
@@ -37,11 +36,10 @@ public class MongoMqttCallback implements MqttCallback{
 		return l;
 	}
 	
-	@Override
+
 	public void deliveryComplete(IMqttDeliveryToken token) {
 	}
 
-	@Override
 	public void connectionLost(Throwable cause) {
 	}
 }

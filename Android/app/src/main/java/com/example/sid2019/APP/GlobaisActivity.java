@@ -3,6 +3,7 @@ package com.example.sid2019.APP;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Color;
+import android.os.AsyncTask;
 import android.os.StrictMode;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -51,7 +52,20 @@ public class GlobaisActivity extends AppCompatActivity {
         updateMedicoes();
         drawGraphs();
 
-
+        AsyncTask.execute(new Runnable() {
+            @Override
+            public void run() {
+                while (true) {
+                    try {
+                        Thread.sleep(3000);
+                        updateMedicoes();
+                        drawGraphs();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        });
     }
 
     public void refresh(View v){

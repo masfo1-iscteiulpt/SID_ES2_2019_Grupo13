@@ -33,7 +33,6 @@ public class AlertasCulturaActivity extends AppCompatActivity {
     private static final String username= UserLogin.getInstance().getUsername();
     private static final String password = UserLogin.getInstance().getPassword();
     DatabaseHandler db = new DatabaseHandler(this);
-    NotificationHelper nm = new NotificationHelper(this);
     String getAlertasCultura = "http://" + IP + ":" + PORT + "/scripts/getAlertasCultura.php";
     String getInformacaoCultura = "http://" + IP + ":" + PORT + "/scripts/getInformacaoCultura.php";
     int year;
@@ -59,7 +58,8 @@ public class AlertasCulturaActivity extends AppCompatActivity {
         }
         populateComboBox();
         dateToString();
-        getAlertas();
+        if(getAlertas()!=null)
+        NotificationHelper.getInstance(this).createNotification("Alertas Cultura","Tem alertas nas suas culturas");
         listAlertas();
     }
 
@@ -138,8 +138,9 @@ public class AlertasCulturaActivity extends AppCompatActivity {
 
     }
 
-    private void getAlertas() {
+    private JSONArray getAlertas() {
         db.clearAlertasGlobais();
+        JSONArray medicoesTemperatura=null;
         if (spinner.getSelectedItem()!=null){
             String idCultura = spinner.getSelectedItem().toString();
             HashMap<String, String> params = new HashMap<>();
@@ -148,7 +149,7 @@ public class AlertasCulturaActivity extends AppCompatActivity {
             params.put("date", date);
             params.put("idCultura",idCultura);
             ConnectionHandler jParser = new ConnectionHandler();
-            JSONArray medicoesTemperatura = jParser.getJSONFromUrl(getAlertasCultura, params);
+            medicoesTemperatura = jParser.getJSONFromUrl(getAlertasCultura, params);
             try {
                 if (medicoesTemperatura != null) {
                     for (int i = 0; i < medicoesTemperatura.length(); i++) {
@@ -160,13 +161,14 @@ public class AlertasCulturaActivity extends AppCompatActivity {
                         double valorMedicao = c.getDouble("ValorMedicao");
                         String descricao = c.getString("Descricao");
                         db.insert_alertaGlobal(dataHoraMedicao, nomeVariavel, limiteInferior, limiteSuperior, valorMedicao, descricao);
-                        nm.createNotification();
                     }
                 }
             }catch (JSONException e) {
                 e.printStackTrace();
-            }}
+            }
 
+        }
+        return medicoesTemperatura;
 
 
     }

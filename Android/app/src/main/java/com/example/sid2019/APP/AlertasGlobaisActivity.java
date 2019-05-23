@@ -30,7 +30,6 @@ public class AlertasGlobaisActivity extends AppCompatActivity {
     private static final String username= UserLogin.getInstance().getUsername();
     private static final String password = UserLogin.getInstance().getPassword();
     DatabaseHandler db = new DatabaseHandler(this);
-    NotificationHelper nm = new NotificationHelper(this);
     String getAlertasGlobais = "http://" + IP + ":" + PORT + "/scripts/getAlertasGlobais.php";
     int year;
     int month;
@@ -54,8 +53,10 @@ public class AlertasGlobaisActivity extends AppCompatActivity {
             day = Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
         }
         dateToString();
-        getAlertas();
+        if(getAlertas()!=null)
+        NotificationHelper.getInstance(this).createNotification("Alertas Globais","Tem alertas globais");
         listAlertas();
+
     }
 
 
@@ -88,7 +89,7 @@ public class AlertasGlobaisActivity extends AppCompatActivity {
         finish();
     }
 
-    private void getAlertas(){
+    private JSONArray getAlertas(){
         db.clearAlertasGlobais();
         HashMap<String, String> params = new HashMap<>();
         params.put("username", username);
@@ -98,7 +99,7 @@ public class AlertasGlobaisActivity extends AppCompatActivity {
         JSONArray medicoesTemperatura = jParser.getJSONFromUrl(getAlertasGlobais, params);
         try{
             if(medicoesTemperatura!=null){
-                for (int i=0;i< medicoesTemperatura.length();i++){
+                for (int i=0;i< medicoesTemperatura.length();i++) {
                     JSONObject c = medicoesTemperatura.getJSONObject(i);
                     String dataHoraMedicao = c.getString("DataHora");
                     String nomeVariavel = c.getString("NomeVariavel");
@@ -106,14 +107,13 @@ public class AlertasGlobaisActivity extends AppCompatActivity {
                     double limiteSuperior = c.getDouble("LimiteSuperior");
                     double valorMedicao = c.getDouble("ValorMedicao");
                     String descricao = c.getString("Descricao");
-                    db.insert_alertaGlobal(dataHoraMedicao,nomeVariavel,limiteInferior,limiteSuperior,valorMedicao,descricao);
-                    nm.createNotification();
+                    db.insert_alertaGlobal(dataHoraMedicao, nomeVariavel, limiteInferior, limiteSuperior, valorMedicao, descricao);
                 }
             }
         }catch (JSONException e){
             e.printStackTrace();
         }
-
+        return  medicoesTemperatura;
 
     }
 

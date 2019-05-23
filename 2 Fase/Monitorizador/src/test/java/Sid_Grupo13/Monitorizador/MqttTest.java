@@ -20,24 +20,22 @@ public class MqttTest
 	@Test
     public void pollerTest() {
     	Poller p = new Poller("/sid_lab_2019_2", "tcp://broker.mqtt-dashboard.com:1883", "MqttReciever", new MqttCallback() {
-			
-			@Override
-			public void messageArrived(String topic, MqttMessage message) throws Exception {
-				// TODO Auto-generated method stub
-				
-			}
-			
-			@Override
-			public void deliveryComplete(IMqttDeliveryToken token) {
-				// TODO Auto-generated method stub
-				
-			}
-			
-			@Override
+
 			public void connectionLost(Throwable cause) {
 				// TODO Auto-generated method stub
 				
 			}
+
+			public void messageArrived(String topic, MqttMessage message) throws Exception {
+				// TODO Auto-generated method stub
+				
+			}
+
+			public void deliveryComplete(IMqttDeliveryToken token) {
+				// TODO Auto-generated method stub
+				
+			}
+    	
 		});
     	p.connect();
     	p.subscribe();
