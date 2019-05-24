@@ -15,23 +15,22 @@ import com.mongodb.client.FindIterable;
 import Sid_Grupo13.Monitorizador.models.Leitura;
 
 public class MongoToMySql {
-
-	MySqlConnector mysqlConnector = new MySqlConnector("jdbc:mariadb://localhost:3306/sid2019", "root", "123");
-	MongoConnector mongoConnector = new MongoConnector("Leituras");
-	static int setsize = 3;
-	static int sleeptime = 2000;
-
+	
 	public static void main(String[] args) throws InterruptedException, ParseException {
 		// criar user para nao utilizar o root
-		MongoToMySql m = new MongoToMySql();
+		MySqlConnector mysqlConnector = new MySqlConnector("jdbc:mariadb://localhost:3306/"+args[0], args[1],args[2]);
+		MongoConnector mongoConnector = new MongoConnector("Leituras");
+		int setsize=Integer.parseInt(args[3]);
+		int sleeptime=Integer.parseInt(args[4]);
+		MongoToMySql m=new MongoToMySql();
 		while (true) {
 
-			FindIterable<Document> found = m.mongoConnector.queryFromLastExported();
+			FindIterable<Document> found = mongoConnector.queryFromLastExported();
 			ArrayList<Document> evenlist = new ArrayList<Document>();
 
 			for (Document d : found) {
 				if (evenlist.size() > setsize) {
-					m.store(m.median(evenlist));
+					m.store(m.median(evenlist),mongoConnector,mysqlConnector);
 					evenlist.clear();
 				}
 				evenlist.add(d);
@@ -69,7 +68,7 @@ public class MongoToMySql {
 				last.getInteger("readid"));
 	}
 
-	private void store(Leitura even) {
+	private void store(Leitura even,MongoConnector mongoConnector,MySqlConnector mySqlConnector) {
 		if (even != null) {
 			System.out.println(even.toMongoStringCurrentID());
 			Timestamp timestamp = getTimestamp(even.getDat(), even.getTim());
@@ -77,8 +76,8 @@ public class MongoToMySql {
 			double light = (even.getCell());
 			double temperature = (even.getTmp());
 
-			mysqlConnector.insert("medicoes_temperatura", id, timestamp, temperature);
-			mysqlConnector.insert("medicoes_luminosidade", id, timestamp, light);
+			mySqlConnector.insert("medicoes_temperatura", id, timestamp, temperature);
+			mySqlConnector.insert("medicoes_luminosidade", id, timestamp, light);
 			mongoConnector.incrementLastExported(even.getId());
 		} else {
 			System.out.println("nenhum elemento guardado");

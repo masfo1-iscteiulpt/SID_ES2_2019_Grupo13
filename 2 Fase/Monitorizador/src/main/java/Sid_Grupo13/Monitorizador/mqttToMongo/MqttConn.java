@@ -16,12 +16,12 @@ import Sid_Grupo13.Monitorizador.MongoConnector;
 import Sid_Grupo13.Monitorizador.models.Leitura;
 
 public class MqttConn {
-	static int samplesize=10;
-	static int percentagediff=10;
 	public static void main(String[] args) {
+		String topic=args[0];
+		String server=args[1];
 		MongoConnector mconn = new MongoConnector("Leituras");
 		MqttCallback callback = new MongoMqttCallback(mconn);
-		Poller p=new Poller("/sid_lab_2019", "tcp://iot.eclipse.org", "MqttReciever", callback);
+		Poller p=new Poller(topic, server, "MqttReciever", callback);
 		p.connect();
 		p.subscribe();
 		System.out.println("Pressione uma tecla para sair...");
