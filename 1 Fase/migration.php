@@ -11,35 +11,35 @@ if (!$conn) {
 
 ini_set('max_execution_time', 300);
 
-$sql1 = "INSERT INTO auditordb.log_consultas
-         SELECT * FROM siddb.log_consultas
-         WHERE idLog_Consultas > 
-            (SELECT IF(MAX(idLog_Consultas) != '', MAX(idLog_Consultas), 0) FROM auditordb.log_consultas);";
+$sql1 = "INSERT INTO auditor.cultura_log
+         SELECT * FROM sid2019.cultura_log
+         WHERE id > 
+            (SELECT IF(MAX(id) != '', MAX(id), 0) FROM auditor.cultura_log);";
 
-$sql2 = "INSERT INTO auditordb.log_cultura
-         SELECT * FROM siddb.log_cultura
-         WHERE idCultura > 
-            (SELECT IF(MAX(idCultura) != '', MAX(idCultura), 0) FROM auditordb.log_cultura);";
+$sql2 = "INSERT INTO auditor.utilizador_log
+         SELECT * FROM sid2019.utilizador_log
+         WHERE id > 
+            (SELECT IF(MAX(id) != '', MAX(id), 0) FROM auditor.utilizador_log);";
 
-$sql3 = "INSERT INTO auditordb.log_investigador
-         SELECT * FROM siddb.log_investigador
-         WHERE idLog_Investigador > 
-            (SELECT IF(MAX(idLog_Investigador) != '', MAX(idLog_Investigador), 0) FROM auditordb.log_investigador);";
+$sql3 = "INSERT INTO auditor.medicao_log
+         SELECT * FROM sid2019.medicao_log
+         WHERE id > 
+            (SELECT IF(MAX(id) != '', MAX(id), 0) FROM auditor.medicao_log);";
 
-$sql4 = "INSERT INTO auditordb.log_medicoes
-         SELECT * FROM siddb.log_medicoes
-         WHERE idMedicao > 
-            (SELECT IF(MAX(idMedicao) != '', MAX(idMedicao), 0) FROM auditordb.log_medicoes);";
+$sql4 = "INSERT INTO auditor.sistema_log
+         SELECT * FROM sid2019.sistema_log
+         WHERE id > 
+            (SELECT IF(MAX(id) != '', MAX(id), 0) FROM auditor.sistema_log);";
 
-$sql5 = "INSERT INTO auditordb.log_sistema
-         SELECT * FROM siddb.log_sistema
-         WHERE idLog_Sistema > 
-            (SELECT IF(MAX(idLog_Sistema) != '', MAX(idLog_Sistema), 0) FROM auditordb.log_sistema);";
+$sql5 = "INSERT INTO auditor.variavel_log
+         SELECT * FROM sid2019.variavel_log
+         WHERE id > 
+            (SELECT IF(MAX(id) != '', MAX(id), 0) FROM auditor.variavel_log);";
 
-$sql6 = "INSERT INTO auditordb.log_variavel
-         SELECT * FROM siddb.log_variavel
-         WHERE idVariavel > 
-            (SELECT IF(MAX(idVariavel) != '', MAX(idVariavel), 0) FROM auditordb.log_variavel);";
+$sql6 = "INSERT INTO auditor.variaveis_medidas_log
+         SELECT * FROM sid2019.variaveis_medidas_log
+         WHERE id > 
+            (SELECT IF(MAX(id) != '', MAX(id), 0) FROM auditor.variaveis_medidas_log);";
 
 echo "Starting migrations.<br>";
 
@@ -53,39 +53,39 @@ $result6 = mysqli_query($conn, $sql6);
 $end_time = strtotime("now");
 
 if ($result1) {
-    echo "SUCCESS - log_consultas<br>";
+    echo "SUCCESS - cultura_log<br>";
 } else {
-    echo "FAILED - log_consultas<br>";
+    echo "FAILED - cultura_log<br>";
 }
 
 if ($result2) {
-    echo "SUCCESS - log_cultura<br>";
+    echo "SUCCESS - utilizador_log<br>";
 } else {
-    echo "FAILED - log_cultura<br>";
+    echo "FAILED - utilizador_log<br>";
 }
 
 if ($result3) {
-    echo "SUCCESS - log_investigador<br>";
+    echo "SUCCESS - medicao_log<br>";
 } else {
-    echo "FAILED - log_investigador<br>";
+    echo "FAILED - medicao_log<br>";
 }
 
 if ($result4) {
-    echo "SUCCESS - log_medicoes<br>";
+    echo "SUCCESS - sistema_log<br>";
 } else {
-    echo "FAILED - log_medicoes<br>";
+    echo "FAILED - sistema_log<br>";
 }
 
 if ($result5) {
-    echo "SUCCESS - log_sistema<br>";
+    echo "SUCCESS - variavel_log<br>";
 } else {
-    echo "FAILED - log_sistema<br>";
+    echo "FAILED - variavel_log<br>";
 }
 
 if ($result6) {
-    echo "SUCCESS - log_variavel<br>";
+    echo "SUCCESS - variaveis_medidas_log<br>";
 } else {
-    echo "FAILED - log_variavel<br>";
+    echo "FAILED - variaveis_medidas_log<br>";
 }
 
 echo "Migrations completed.<br>";
