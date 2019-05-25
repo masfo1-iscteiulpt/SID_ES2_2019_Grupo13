@@ -14,8 +14,8 @@ Instruções, passo a passo, de como fazer o download da aplicação, a instala�
 # Instruções
 
 Requirements:  
-		- Windows 10;  
-	- Java 1.8;  
+- Windows 10;  
+- Java 1.8;  
 	- MongoDB;  
 	- XAMPP;  
 	- Abrir porta 80 na firewall do Windows.  
